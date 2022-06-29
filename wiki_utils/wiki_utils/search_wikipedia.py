@@ -30,3 +30,7 @@ def extract_articles(response):
 
     return candidate_articles
 
+
+
+
+

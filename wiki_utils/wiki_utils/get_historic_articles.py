@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 from typing import Dict
 from time import strptime, struct_time
 
-def get_history_page(page_name: str) -> BeautifulSoup:
+def get_history_page(page_id: str) -> BeautifulSoup:
     '''Get the history page associated with the page_name.
 
     Args:
@@ -14,7 +14,8 @@ def get_history_page(page_name: str) -> BeautifulSoup:
     '''
 
     response = requests.get(
-        f"https://en.wikipedia.org/w/index.php?title={page_name}&offset=&limit=500&action=history")
+        f"http://en.wikipedia.org/?curid={page_id}&offset=&limit=500&action=history")
+
 
     return BeautifulSoup(response.text)
 
