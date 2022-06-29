@@ -1,6 +1,7 @@
 import requests
 import time
 
+
 def search_wikipedia(query: str,
                      api_url: str = "https://en.wikipedia.org/w/api.php",
                      srlimit: int = 100,
@@ -19,7 +20,7 @@ def search_wikipedia(query: str,
 
     S = requests.Session()
     retry_flag = 0
-    while retry_flag < 5: 
+    while retry_flag < 5:
         try:
             response = S.get(api_url, params=search_params)
         except:
@@ -29,18 +30,13 @@ def search_wikipedia(query: str,
         else:
             return response.json()
     return None
-        
 
 
 def extract_articles(response):
-    
+
     url_pattern = "http://en.wikipedia.org/?curid="
     search_items = response["query"]["search"]
-    candidate_articles = [ (i["title"], url_pattern + str(i["pageid"])) for i in search_items]
-    
+    candidate_articles = [(i["title"], url_pattern + str(i["pageid"]))
+                          for i in search_items]
+
     return candidate_articles
-
-
-
-
-
