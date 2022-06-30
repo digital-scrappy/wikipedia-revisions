@@ -4,7 +4,7 @@ import time
 
 def search_wikipedia(query: str,
                      api_url: str = "https://en.wikipedia.org/w/api.php",
-                     srlimit: int = 100,
+                     srlimit: int = 10,
                      srsort: str = "relevance",
                      ):
 
@@ -26,11 +26,25 @@ def search_wikipedia(query: str,
         except:
             retry_flag += 1
             time.sleep(1)
-            print(f"query for {query} failed ")
+            
+            print(f"\nquery for {query} failed ")
         else:
             return response.json()
     return None
 
+
+def dynamic_search_wikipedia(query: str,
+                             srlimit: int = 10
+                             ):
+    query = query.replace("&", "and")
+    sub_queries = query.split("and") + [query]
+    srlimit = len(sub_queries) if len(sub_queries) > srlimit else srlimit // len(sub_queries)
+    responses = []
+    for query in sub_queries:
+        responses.append(search_wikipedia(query=query, srlimit= srlimit))
+
+    return responses
+        
 
 def extract_articles(response):
 

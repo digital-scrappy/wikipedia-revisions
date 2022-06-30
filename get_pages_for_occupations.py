@@ -6,8 +6,6 @@ import time
 from tqdm import trange
 import sqlite3
 
-in_path = "/home/scrappy/data/csh/bls/source/soc_structure_2018.xlsx"
-db_path = "/home/scrappy/data/csh/bls/processed/soc_2018_Detailed.db"
 
 def get_pages_for_occupations(in_path, db_path, group_level= "Detailed Occupation", srlimit = 10):
     '''A function to retrieve the candidate links the top n link returned by wikipedia search for each occupation
@@ -23,18 +21,27 @@ def get_pages_for_occupations(in_path, db_path, group_level= "Detailed Occupatio
     cur = con.cursor()
 
     occupations = bls.get_occupations(in_path, group=group_level)
+    print(occupations)
 
     for i in trange(len(occupations)):
         time.sleep(0.5)
         occupation = occupations[i]
-        response = wiki.search_wikipedia(query=occupation, srlimit= srlimit)
+        responses = wiki.dynamic_search_wikipedia(query=occupation, srlimit= srlimit)
+        # response = wiki.search_wikipedia(query=occupation, srlimit= srlimit)
 
-        if response:
-            content = wiki.extract_articles(response)
-            sucess = 1
+        content = []
+        for response in responses:
+            if response:
+                try:
+                    content += wiki.extract_articles(response)
+                    sucess = 1
+                except KeyError:
+                    print("some key error in wiki.extract_articles")
 
-        else:
-            content = None
+            else:
+                continue
+
+        if len(content) == 0:
             sucess = 0
 
         sql.write_occupation_to_db(occupation,
@@ -43,5 +50,8 @@ def get_pages_for_occupations(in_path, db_path, group_level= "Detailed Occupatio
                                 cur,
                                 con,
                                 table = "occupations")
+
+
+
 
     con.close()
