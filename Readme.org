@@ -9,13 +9,13 @@ A function to retrieve the candidate links the top n link returned by wikipedia 
 
 
 Args:
-  in_path (str) : the path to the xlsx file holding the bls soc structure
+ - in_path (str) : the path to the xlsx file holding the bls soc structure
 
-  db_path (str) : the path to the sqlite db storing the data
+   - db_path (str) : the path to the sqlite db storing the data
 
-  group_level (str): The the level at which to extract occupations can be one of either ["Minor  Group", "Broad Group", "Detailed Occupation"]
+   - group_level (str): The the level at which to extract occupations can be one of either ["Minor  Group", "Broad Group", "Detailed Occupation"]
 
-  srlimit (int) : the number of top search results to use
+ - srlimit (int) : the number of top search results to use
 
 
 Returns:
