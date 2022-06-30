@@ -1,0 +1,21 @@
+#+Title: Documentation for various helper functions
+* Requirements
+can be either installed via poetry or pip using `pip install -r requirements.txt`
+
+* Important functions / files
+
+** get_pages_for_occupations
+A function to retrieve the candidate links the top n link returned by wikipedia search for each occupation
+Args:
+  in_path (str) : the path to the xlsx file holding the bls soc structure
+  db_path (str) : the path to the sqlite db storing the data
+  group_level (str): The the level at which to extract occupations can be one of either ["Minor  Group", "Broad Group", "Detailed Occupation"]
+  srlimit (int) : the number of top search results to use
+
+Returns:
+  None
+
+ 
+** terminal_interface.py
+a terminal programm for selecting from the candidate links
+
