@@ -1,4 +1,5 @@
 *.~undo-tree~
 .venv/
 dist/
-pycache__/
+__pycache__/
+
