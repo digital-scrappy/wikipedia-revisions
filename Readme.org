@@ -4,7 +4,7 @@ can be either installed via poetry or pip using `pip install -r requirements.txt
 
 * Important functions / files
 
-** get_pages_for_occupations(
+** get_pages_for_occupations()
 A function to retrieve the candidate links the top n link returned by wikipedia search for each occupation
 
 
