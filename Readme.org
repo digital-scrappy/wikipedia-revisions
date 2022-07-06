@@ -1,4 +1,16 @@
 #+Title: Documentation for various helper functions
+* TODO initial stuff
+corr - edits to employment
+edits to wages
+same for employment growth and wage growth
+* TODO learn 
+tomotopy
+structural topic modelling in R
+berttopic
+* Data 
+overall source for data:
+https://www.bls.gov/oes/tables.htm
+specific source link https://www.bls.gov/oes/special.requests/oesm21nat.zip
 * Requirements
 can be either installed via poetry or pip using `pip install -r requirements.txt`
 
