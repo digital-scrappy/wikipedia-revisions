@@ -18,7 +18,7 @@ def get_pages_for_occupations(in_path, db_path, group_level= "Detailed Occupatio
     Returns:
         None'''
     con = sqlite3.connect(db_path)
-    cur = con.cursor()
+   cur = con.cursor()
 
     occupations = bls.get_occupations(in_path, group=group_level)
     print(occupations)

@@ -1,9 +1,14 @@
 import sqlite3
+import time
+from typing import List
 from numpy import int64
 import pandas as pd
 from collections import OrderedDict
 from pathlib import Path 
 import json
+from datetime import datetime
+from wiki_utils import get_revisions
+from tqdm import trange
 
 old_db_path = "/home/scrappy/data/csh/bls/processed/oesm21nat.db"
 new_db_path = "/home/scrappy/data/csh/aggregated_edits.db"
@@ -19,6 +24,7 @@ bls_reports = [("oesm13nat", "national_M2013_dl.xls"),
                ("oesm20nat", "national_M2020_dl.xlsx"),
                ("oesm21nat", "national_M2021_dl.xlsx")]
 
+years = [2013+i for i in range(9)]
 
 old_con = sqlite3.connect(old_db_path)
 old_cur = old_con.cursor()
@@ -45,27 +51,44 @@ for i in bls_reports:
     df.columns = map(str.upper, df.columns)
     bls_dfs[i[0]] = df
 
-
-
-
-
-# for i in bls_dfs.values():
-#     print(i[i.OCC_CODE == "11-2011"]["TOT_EMP"].values[0])
-#     break
-
-
-
 old_cur.execute(
     f"SELECT occ_code, occ_title, lenient_links, strict_links FROM occupations WHERE length(strict_links) > 3")
 data = old_cur.fetchall()
 
-columns = ["id integer primary key"] + ["occ_code", "occ_title"] +  my_columns + list(empty_occ_columns.keys())
+columns = ["id integer primary key"] + ["occ_code", "occ_title"] + my_columns + ["lenient_edit_sum", "strict_edit_sum"] + list(empty_occ_columns.keys())
 new_cur.execute(f"CREATE TABLE occupations({' ,'.join(columns)})")
 
-for occ in data:
-    occ_code, occ_title, lenient_links, strict_links = occ
+# for occ in data:
+for idx in trange(len(data)):
+    occ = data[idx]
+    occ_code, occ_title, lenient_links_json, strict_links_json = occ
     
     occ_columns = { "TOT_EMP": [], "H_MEAN": [], "A_MEAN": [], "H_PCT10": [], "H_PCT25": [], "H_MEDIAN": [], "H_PCT75": [], "H_PCT90": [], "A_PCT10": [], "A_PCT25": [], "A_MEDIAN": [], "A_PCT75": [], "A_PCT90": []}
+
+    lenient_links = json.loads(lenient_links_json)
+    strict_links = json.loads(strict_links_json)
+    lenient_edits = []
+    strict_edits = []
+    for year in years:
+
+        start = datetime(year-1, 6, 1)
+        end = datetime(year, 5, 31, 23,59,59,59)
+
+        edit_sum = 0
+        for link in lenient_links:
+
+            edit_sum += len(get_revisions(link[0], start, end))
+
+        lenient_edits.append(edit_sum)
+
+        edit_sum = 0
+        for link in strict_links:
+            edit_sum += len(get_revisions(link[0], start, end))
+        strict_edits.append(edit_sum)
+
+
+            
+
 
     for bls_df in bls_dfs.values():
         row = bls_df[bls_df["OCC_CODE"] == occ_code]
@@ -78,10 +101,18 @@ for occ in data:
             else:
                 occ_columns[key].append(value)
 
-    occ_values = [occ_code, occ_title, lenient_links, strict_links]
+    occ_values = [occ_code,
+                  occ_title,
+                  lenient_links_json,
+                  strict_links_json,
+                  json.dumps(lenient_edits),
+                  json.dumps(strict_edits)]
+
     for stat in occ_columns.values():
         occ_values.append(json.dumps(stat))
-    new_cur.execute(f"INSERT INTO occupations Values (NULL, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", tuple(occ_values))
+    # for i in occ_values:
+    #     print(type(i))
+    new_cur.execute(f"INSERT INTO occupations Values (NULL, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", tuple(occ_values))
     new_con.commit()
 
         

@@ -7,10 +7,23 @@ same for employment growth and wage growth
 tomotopy
 structural topic modelling in R
 berttopic
+
+
+* Methodological notes
+The estimates of the oews estimates are calculated for a specific month (in our case I selected only the ones for May) but they rely on the 6 most recent surveys (2 per year) to produce an estimate.
+
+#+begin_quote
+The May 2019 employment and wage estimates were calculated using data collected in the May 2019, November 2018, May 2018, November 2017, May 2017, and November 2016 semi-annual panels. 
+--- https://www.bls.gov/oes/oes_ques.htm#overview
+#+end_quote
+
+Since we still have yearly estimates for labour statistic we use the edits accumulated edits in the 12 months up to and including the month of the estimate.
+For May 2012 we count the edits starting with June 2011 ending with May 2012
 * Data 
 overall source for data:
 https://www.bls.gov/oes/tables.htm
 specific source link https://www.bls.gov/oes/special.requests/oesm21nat.zip
+potentially better estimates for employment stats are here https://www.bls.gov/oes/oes-mb3-methods.htm
 * Requirements
 can be either installed via poetry or pip using `pip install -r requirements.txt`
 
