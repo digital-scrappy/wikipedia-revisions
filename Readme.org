@@ -1,5 +1,5 @@
 #+Title: Documentation for various helper functions
-* preliminary results:
+* preliminary results
 
 
 #+begin_quote
@@ -15,14 +15,35 @@ avg. pval: emp_growth -> 0.49933698369676244
 avg. rho: wage_growth -> 0.32272633278255625
 avg. pval: wage_growth -> 0.4889306728227626
 #+end_quote
-* TODO DeTrending
+* Technical debt
+Locally saving all the Wikipedia data we could ever need for the 300 labelled pages would save me from ever struggling with ConnectionErrors again.
+[[https://mwclient.readthedocs.io/en/latest/user/page-ops.html][mwclient]] should be the best solution for retrieving wikipedia data (although building something that can read a whole wikipedia dump could be a cool solution if on has space for a few TB temporarily).
+
+
+
+* TODO look into de-trending
 * TODO Qualitative analysis of edits
-* TODO Get measurement of edit steady state
-* TODO learn 
+* TODO learn about following software
 tomotopy
 structural topic modelling in R
 berttopic
 
+* Questions and Observations
+** edit frequency observations
+*** Spike after Page inception?
+The hypothesis:
+The number of edit spikes after pages creation and then levels of as the page has gotten to an acceptable/complete state.
+
+- Observation 1:
+  This does not hold for pages like [[https://en.wikipedia.org/wiki/Baker][Baker]]. Baker was created in 2003 and recieved only around 10 edits in that year. Also in 2004 the number of edits was pretty low.
+
+  Back then [[https://en.wikipedia.org/wiki/Baker][Baker]] was more similar to a disambiguation page today - the site also named quite some towns with baker in their name.
+  
+** Hypothesis: The Beginnings of Wikipedia and Pages are chaotic
+Should we just give Wikipedia and Occupation pages some time to settle down? (1 or 2 years?)
+
+** Watch out for stubs?
+Is there a way to track stubs and should we only consider pages after loosing their stub status?
 
 * Methodological notes
 The estimates of the oews estimates are calculated for a specific month (in our case I selected only the ones for May) but they rely on the 6 most recent surveys (2 per year) to produce an estimate.
