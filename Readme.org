@@ -1,12 +1,12 @@
 #+Title: Documentation for various helper functions
 * Information and Usefull Software
-I guess the most interesting scripts currently are located in `the Analysis/` directory
-for now since the whole execution only takes a fraction of a second I am not using notebooks
+I guess the most interesting scripts currently are located in =the Analysis/= directory
+For now since the whole execution only takes a fraction of a second I am not using notebooks
 
 ** Dependency management
 I manage dependencies using poetry it's a python dependency management tool. 
-But it's also straightforward to install the dependencies using `pip install -r requirements.txt`
-If some dependencies are missing in the requirements.txt thats because I (jakob) forgot to run `poetry export` in that case write me an angry email :)
+But it's also straightforward to install the dependencies using =pip install -r requirements.txt=
+If some dependencies are missing in the requirements.txt thats because I (jakob) forgot to run =poetry export= in that case write me an angry email :)
 
 ** Sqlite
 - sqlitebrowser
