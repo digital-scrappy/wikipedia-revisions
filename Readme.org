@@ -1,4 +1,17 @@
 #+Title: Documentation for various helper functions
+* Information and Usefull Software
+I guess the most interesting scripts currently are located in `the Analysis/` directory
+for now since the whole execution only takes a fraction of a second I am not using notebooks
+
+** Dependency management
+I manage dependencies using poetry it's a python dependency management tool. 
+But it's also straightforward to install the dependencies using `pip install -r requirements.txt`
+If some dependencies are missing in the requirements.txt thats because I (jakob) forgot to run `poetry export` in that case write me an angry email :)
+
+** Sqlite
+- sqlitebrowser
+  for viewing the databases
+ 
 * preliminary results
 
 
@@ -16,10 +29,10 @@ avg. pval: emp_growth -> 0.49933698369676244
 avg. rho: wage_growth -> 0.32272633278255625
 avg. pval: wage_growth -> 0.4889306728227626
 #+end_quote
+
 * Technical debt
 - Locally saving all the Wikipedia data we could ever need for the 300 labelled pages would save me from ever struggling with ConnectionErrors again.
 - [[https://mwclient.readthedocs.io/en/latest/user/page-ops.html][mwclient]] should be the best solution for retrieving wikipedia data (although building something that can read a whole wikipedia dump could be a cool solution if on has space for a few TB temporarily).
-
 
 
 * TODO look into de-trending
