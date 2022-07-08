@@ -1,8 +1,23 @@
 #+Title: Documentation for various helper functions
-* TODO initial stuff
-corr - edits to employment
-edits to wages
-same for employment growth and wage growth
+* preliminary results:
+
+
+#+begin_quote
+avg. rho: emp -> 0.36473591446118697
+avg. pval: emp -> 0.41395059623960395
+
+avg. rho: wage -> 0.40135077440409767
+avg. pval: wage -> 0.36451839945463854
+
+avg. rho: emp_growth -> 0.315427998495521
+avg. pval: emp_growth -> 0.49933698369676244
+
+avg. rho: wage_growth -> 0.32272633278255625
+avg. pval: wage_growth -> 0.4889306728227626
+#+end_quote
+* TODO DeTrending
+* TODO Qualitative analysis of edits
+* TODO Get measurement of edit steady state
 * TODO learn 
 tomotopy
 structural topic modelling in R
