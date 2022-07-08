@@ -6,6 +6,7 @@
 avg. rho: emp -> 0.36473591446118697
 avg. pval: emp -> 0.41395059623960395
 
+
 avg. rho: wage -> 0.40135077440409767
 avg. pval: wage -> 0.36451839945463854
 
@@ -16,8 +17,8 @@ avg. rho: wage_growth -> 0.32272633278255625
 avg. pval: wage_growth -> 0.4889306728227626
 #+end_quote
 * Technical debt
-Locally saving all the Wikipedia data we could ever need for the 300 labelled pages would save me from ever struggling with ConnectionErrors again.
-[[https://mwclient.readthedocs.io/en/latest/user/page-ops.html][mwclient]] should be the best solution for retrieving wikipedia data (although building something that can read a whole wikipedia dump could be a cool solution if on has space for a few TB temporarily).
+- Locally saving all the Wikipedia data we could ever need for the 300 labelled pages would save me from ever struggling with ConnectionErrors again.
+- [[https://mwclient.readthedocs.io/en/latest/user/page-ops.html][mwclient]] should be the best solution for retrieving wikipedia data (although building something that can read a whole wikipedia dump could be a cool solution if on has space for a few TB temporarily).
 
 
 
