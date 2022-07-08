@@ -30,15 +30,14 @@ structural topic modelling in R
 berttopic
 
 * Questions and Observations
-** edit frequency observations
-*** Spike after Page inception?
+** Spike after Page inception?
 The hypothesis:
 The number of edit spikes after pages creation and then levels of as the page has gotten to an acceptable/complete state.
 
 - Observation 1:
   This does not hold for pages like [[https://en.wikipedia.org/wiki/Baker][Baker]]. Baker was created in 2003 and recieved only around 10 edits in that year. Also in 2004 the number of edits was pretty low.
 
-  Back then [[https://en.wikipedia.org/wiki/Baker][Baker]] was more similar to a disambiguation page today - the site also named quite some towns with baker in their name.
+  Back then [[https://en.wikipedia.org/wiki/Baker][Baker]] was more similar to a disambiguation page today - the site also named some towns with baker in their name.
   
 ** Hypothesis: The Beginnings of Wikipedia and Pages are chaotic
 Should we just give Wikipedia and Occupation pages some time to settle down? (1 or 2 years?)
