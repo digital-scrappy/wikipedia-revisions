@@ -34,9 +34,14 @@ avg. pval: wage_growth -> 0.4889306728227626
 - Locally saving all the Wikipedia data we could ever need for the 300 labelled pages would save me from ever struggling with ConnectionErrors again.
 - [[https://mwclient.readthedocs.io/en/latest/user/page-ops.html][mwclient]] should be the best solution for retrieving wikipedia data (although building something that can read a whole wikipedia dump could be a cool solution if on has space for a few TB temporarily).
 
+* Wikipedia api
+creating an OAuth consumer for higher request limit can be done here (after creating a WikiMedia account) https://meta.wikimedia.org/wiki/Special:OAuthConsumerRegistration/propose
+
 
 * TODO look into de-trending
+
 * TODO Qualitative analysis of edits
+
 * TODO learn about following software
 tomotopy
 structural topic modelling in R

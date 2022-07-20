@@ -6,8 +6,6 @@ import pandas as pd
 from collections import OrderedDict
 from pathlib import Path 
 import json
-from datetime import datetime
-from wiki_utils import get_revisions
 from tqdm import trange
 
 old_db_path = "/home/scrappy/data/csh/bls/processed/oesm21nat.db"
@@ -55,7 +53,7 @@ old_cur.execute(
     f"SELECT occ_code, occ_title, lenient_links, strict_links FROM occupations WHERE length(strict_links) > 3")
 data = old_cur.fetchall()
 
-columns = ["id integer primary key"] + ["occ_code", "occ_title"] + my_columns + ["lenient_edit_sum", "strict_edit_sum"] + list(empty_occ_columns.keys())
+columns = ["id integer primary key"] + ["occ_code", "occ_title"] + my_columns +  list(empty_occ_columns.keys())
 new_cur.execute(f"CREATE TABLE occupations({' ,'.join(columns)})")
 
 # for occ in data:
@@ -67,28 +65,6 @@ for idx in trange(len(data)):
 
     lenient_links = json.loads(lenient_links_json)
     strict_links = json.loads(strict_links_json)
-    lenient_edits = []
-    strict_edits = []
-    for year in years:
-
-        start = datetime(year-1, 6, 1)
-        end = datetime(year, 5, 31, 23,59,59,59)
-
-        edit_sum = 0
-        for link in lenient_links:
-
-            edit_sum += len(get_revisions(link[0], start, end))
-
-        lenient_edits.append(edit_sum)
-
-        edit_sum = 0
-        for link in strict_links:
-            edit_sum += len(get_revisions(link[0], start, end))
-        strict_edits.append(edit_sum)
-
-
-            
-
 
     for bls_df in bls_dfs.values():
         row = bls_df[bls_df["OCC_CODE"] == occ_code]
@@ -104,15 +80,11 @@ for idx in trange(len(data)):
     occ_values = [occ_code,
                   occ_title,
                   lenient_links_json,
-                  strict_links_json,
-                  json.dumps(lenient_edits),
-                  json.dumps(strict_edits)]
+                  strict_links_json]
 
     for stat in occ_columns.values():
         occ_values.append(json.dumps(stat))
-    # for i in occ_values:
-    #     print(type(i))
-    new_cur.execute(f"INSERT INTO occupations Values (NULL, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", tuple(occ_values))
+    new_cur.execute(f"INSERT INTO occupations Values (NULL, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", tuple(occ_values))
     new_con.commit()
 
         

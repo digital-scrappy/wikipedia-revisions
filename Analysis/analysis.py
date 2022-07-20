@@ -22,7 +22,7 @@ df = pd.DataFrame({"occ_title": [],
                    "rho_emp" : [],
                    "rho_wage" : [],
                    "rho_emp_diff" : [],
-                   "rho_wage_diff" : []
+                   "rho_wage_diff" : [],
                    "pval_emp" : [],
                    "pval_wage" : [],
                    "pval_emp_diff" : [],
@@ -79,7 +79,3 @@ o
                              pval_emp_diff, pval_wage_diff] 
 
 
-for key, value in rhos.items():
-    print(f"avg. rho: {key} -> {mean([abs(i) for i in value])}") 
-    print(f"avg. pval: {key} -> {mean([abs(i) for i in pvals[key]])}") 
-    print("")
