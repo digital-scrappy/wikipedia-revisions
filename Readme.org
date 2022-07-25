@@ -1,53 +1,59 @@
 #+Title: Documentation for various helper functions
-* Information and Usefull Software
+* Code specific Information
+** Information and Usefull Software
 I guess the most interesting scripts currently are located in =the Analysis/= directory
 For now since the whole execution only takes a fraction of a second I am not using notebooks
 
-** Dependency management
+*** Dependency management
 I manage dependencies using poetry it's a python dependency management tool. 
 But it's also straightforward to install the dependencies using =pip install -r requirements.txt=
 If some dependencies are missing in the requirements.txt thats because I (jakob) forgot to run =poetry export= in that case write me an angry email :)
 
-** Sqlite
+*** Sqlite utils
 - sqlitebrowser
   for viewing the databases
  
-* preliminary results
-
-
-#+begin_quote
-avg. rho: emp -> 0.36473591446118697
-avg. pval: emp -> 0.41395059623960395
-
-
-avg. rho: wage -> 0.40135077440409767
-avg. pval: wage -> 0.36451839945463854
-
-avg. rho: emp_growth -> 0.315427998495521
-avg. pval: emp_growth -> 0.49933698369676244
-
-avg. rho: wage_growth -> 0.32272633278255625
-avg. pval: wage_growth -> 0.4889306728227626
-#+end_quote
-
-* Technical debt
-- Locally saving all the Wikipedia data we could ever need for the 300 labelled pages would save me from ever struggling with ConnectionErrors again.
-- [[https://mwclient.readthedocs.io/en/latest/user/page-ops.html][mwclient]] should be the best solution for retrieving wikipedia data (although building something that can read a whole wikipedia dump could be a cool solution if on has space for a few TB temporarily).
-
-* Wikipedia api
+** Wikipedia api
 creating an OAuth consumer for higher request limit can be done here (after creating a WikiMedia account) https://meta.wikimedia.org/wiki/Special:OAuthConsumerRegistration/propose
 
+** Requirements
+can be either installed via poetry or pip using `pip install -r requirements.txt`
 
-* TODO look into de-trending
+** Important functions / files
 
-* TODO Qualitative analysis of edits
+*** get_pages_for_occupations()
+A function to retrieve the candidate links the top n link returned by wikipedia search for each occupation
 
-* TODO learn about following software
+
+Args:
+ - in_path (str) : the path to the xlsx file holding the bls soc structure
+
+ - db_path (str) : the path to the sqlite db storing the data
+
+ - group_level (str): The the level at which to extract occupations can be one of either ["Minor  Group", "Broad Group", "Detailed Occupation"]
+
+ - srlimit (int) : the number of top search results to use
+
+
+Returns:
+  None
+
+ 
+*** terminal_interface.py
+
+a terminal programm for selecting from the candidate links
+
+
+
+** TODO learn about following software
 tomotopy
 structural topic modelling in R
 berttopic
 
-* Questions and Observations
+* Understanding Wikipedia
+** Size of page content probably matters
+For now I'll try to find an acceptable minimum page size
+** Qualitative analysis of edits
 ** Spike after Page inception?
 The hypothesis:
 The number of edit spikes after pages creation and then levels of as the page has gotten to an acceptable/complete state.
@@ -78,30 +84,6 @@ overall source for data:
 https://www.bls.gov/oes/tables.htm
 specific source link https://www.bls.gov/oes/special.requests/oesm21nat.zip
 potentially better estimates for employment stats are here https://www.bls.gov/oes/oes-mb3-methods.htm
-* Requirements
-can be either installed via poetry or pip using `pip install -r requirements.txt`
 
-* Important functions / files
-
-** get_pages_for_occupations()
-A function to retrieve the candidate links the top n link returned by wikipedia search for each occupation
-
-
-Args:
- - in_path (str) : the path to the xlsx file holding the bls soc structure
-
- - db_path (str) : the path to the sqlite db storing the data
-
- - group_level (str): The the level at which to extract occupations can be one of either ["Minor  Group", "Broad Group", "Detailed Occupation"]
-
- - srlimit (int) : the number of top search results to use
-
-
-Returns:
-  None
-
- 
-** terminal_interface.py
-
-a terminal programm for selecting from the candidate links
-
+** removing pages of innsufficent lenght
+The 40th percentile lays around a page length of 10ky

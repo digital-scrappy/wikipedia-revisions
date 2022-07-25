@@ -1,6 +1,4 @@
 import sqlite3
-import time
-from typing import List
 from numpy import int64
 import pandas as pd
 from collections import OrderedDict

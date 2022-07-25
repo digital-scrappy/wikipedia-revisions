@@ -57,10 +57,7 @@ cur = con.cursor()
 cur.execute("SELECT lenient_revisions FROM occupations")
 occupations =  cur.fetchall()
 all_revs = []
-start = time()
 for occ in occupations:
     revision_dict = month_bin_revisions(json.loads(occ[0]))
     all_revs.append(revision_dict)
-stop = time()
-print(stop-start)    
     
