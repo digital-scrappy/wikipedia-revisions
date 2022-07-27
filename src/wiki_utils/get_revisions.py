@@ -9,7 +9,7 @@ def transfrom_revision(rev):
     rev["timestamp"] = datetime.fromtimestamp(mktime(rev["timestamp"])).isoformat()
     return rev
 
-db_path = "/home/scrappy/data/csh/aggregated_edits.db"
+db_path = "/home/scrappy/Projects/csh/data/aggregated_edits.db"
 credentials_loc = "/home/scrappy/Projects/csh/secrets/mw_oauth1.json"
 
 con = sqlite3.connect(db_path)
@@ -29,8 +29,8 @@ site = mwclient.Site("en.wikipedia.org",
                      access_token=credentials["Access token"],
                      access_secret=credentials["Access secret"],
                      max_lag=5)
-cur.execute("ALTER TABLE occupations ADD strict_revisions MEDIUMTEXT")
-cur.execute("ALTER TABLE occupations ADD lenient_revisions MEDIUMTEXT")
+# cur.execute("ALTER TABLE occupations ADD strict_revisions MEDIUMTEXT")
+# cur.execute("ALTER TABLE occupations ADD lenient_revisions MEDIUMTEXT")
 
 cur.execute("SELECT id, lenient_links, strict_links FROM occupations")
 occupations =  cur.fetchall()
@@ -46,7 +46,7 @@ for idx in trange(len(occupations)):
 
     for page in strict_links:
         name, link = page
-        raw_revisions = site.pages[name].revisions(limit=500, prop = "ids|timestamp|flags|user|userid|size|tags", dir="newer")
+        raw_revisions = site.pages[name].revisions(limit=500, prop = "ids|content|timestamp|flags|user|userid|size|tags", dir="newer")
         revisions = [transfrom_revision(rev) for rev in raw_revisions]
         strict_revision_hist[name] = revisions
     cur.execute("UPDATE occupations SET strict_revisions = ? WHERE id = ?",
@@ -57,7 +57,7 @@ for idx in trange(len(occupations)):
         name, link = page
         if name in lenient_revision_hist.keys():
             continue
-        raw_revisions = site.pages[name].revisions(limit=500, prop = "ids|timestamp|flags|user|userid|size|tags", dir="newer")
+        raw_revisions = site.pages[name].revisions(limit=500, prop = "ids|content|timestamp|flags|user|userid|size|tags", dir="newer")
         revisions = [transfrom_revision(rev) for rev in raw_revisions]
         lenient_revision_hist[name] = revisions
     

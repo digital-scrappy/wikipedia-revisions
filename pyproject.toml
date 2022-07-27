@@ -16,6 +16,8 @@ matplotlib = "^3.5.2"
 scipy = "^1.8.1"
 mwclient = "^0.10.1"
 scikit-learn = "^1.1.1"
+ipywidgets = "^7.7.1"
+ipympl = "^0.9.1"
 
 [tool.poetry.dev-dependencies]
 tqdm = "^4.64.0"

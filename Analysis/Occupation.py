@@ -37,18 +37,27 @@ class Occupation:
             setattr(self, attr,
                     json.loads(getattr(self, attr)))
 
-        self.strict_binned_edits, self.strict_binned_diff = self.get_revision_stats(self.strict_revisions)
-        self.lenient_binned_edits, self.lenient_binned_diff = self.get_revision_stats(self.lenient_revisions)
+        self.strict_binned_edits, self.strict_binned_diffs = self.get_revision_stats(self.strict_revisions)
+        self.lenient_binned_edits, self.lenient_binned_diffs = self.get_revision_stats(self.lenient_revisions)
 
     @staticmethod
-    def get_revision_stats(revisions):
-        binned_revs = month_bin_revisions(revisions)
-        edits = {}
-        diff = {}
+    def get_stats_for_page(binned_revs):
+        temp_edits = {}
+        temp_diffs = {}
         for key, value in binned_revs.items():
+        
             num_edits = len(value)
             num_changes= sum([revision["size"] for revision in value])
 
-            edits[key] = num_edits
-            diff[key] = num_changes
-        return edits, diff
+            temp_edits[key] = num_edits
+            temp_diffs[key] = num_changes
+
+        return temp_edits, temp_diffs
+
+    def get_revision_stats(self, revisions):
+        binned_revs_dict = month_bin_revisions(revisions)
+        edits = {}
+        diffs = {}
+        for page_name, binned_revs in binned_revs_dict.items():
+            edits[page_name], diffs[page_name]= self.get_stats_for_page(binned_revs)
+        return edits, diffs

@@ -24,28 +24,35 @@ def first_day_of_next_month(dt):
                                  day=1)
 
 def month_bin_revisions(rev_dict):
-    revisions = list(itertools.chain.from_iterable(rev_dict.values()))
-    revisions.sort(key= lambda x: datetime.fromisoformat(x["timestamp"]))
+    ''' Bins the revisions into months '''
+    bins = {}
+    for page_name, revisions in rev_dict.items():
+        # revisions = list(itertools.chain.from_iterable(rev_dict.values()))
+        revisions.sort(key= lambda x: datetime.fromisoformat(x["timestamp"]))
 
-    
 
-        
-    earliest_page_conception = datetime.fromisoformat(revisions[0]["timestamp"])
-    
-    bin_start = earliest_page_conception.replace(day=1,hour=0,minute=0,second=0,microsecond=0)
 
-    bins = { bin_start : []}
-    bin_end = first_day_of_next_month(bin_start)
 
-    for revision in revisions:
+        earliest_page_conception = datetime.fromisoformat(revisions[0]["timestamp"])
 
-        time_of_revision = datetime.fromisoformat(revision["timestamp"])
-        if time_of_revision < bin_end:
-            bins[bin_start].append(revision)
-        else:
-            bin_start = time_of_revision.replace(day=1,hour=0,minute=0,second=0,microsecond=0)
-            bin_end = first_day_of_next_month(bin_start)
-            bins[bin_start] = [revision]
+        bin_start = earliest_page_conception.replace(day=1,hour=0,minute=0,second=0,microsecond=0)
+
+        bins[page_name] = { bin_start : []}
+        bin_end = first_day_of_next_month(bin_start)
+
+        for revision in revisions:
+            
+            if "mw-reverted" in revision["tags"]:
+                continue
+            
+
+            time_of_revision = datetime.fromisoformat(revision["timestamp"])
+            if time_of_revision < bin_end:
+                bins[page_name][bin_start].append(revision)
+            else:
+                bin_start = time_of_revision.replace(day=1,hour=0,minute=0,second=0,microsecond=0)
+                bin_end = first_day_of_next_month(bin_start)
+                bins[page_name][bin_start] = [revision]
 
     return bins
 
