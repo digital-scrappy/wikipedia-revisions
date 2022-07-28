@@ -18,7 +18,7 @@ def plot_page_stats(occ : Occupation):
         values  = list(stats.values())
         time_stamps = [month for month in stats.keys()]
         
-        axis[0].plot(time_stamps, values, label=page_name)
+        axis[0].plot(time_stamps, values, label=page_name, alpha=0.8)
     axis[0].set_title("diff")
     axis[0].legend(fontsize = "xx-small")
 
@@ -27,7 +27,7 @@ def plot_page_stats(occ : Occupation):
         values  = list(stats.values())
         time_stamps = [month for month in stats.keys()]
         
-        axis[1].plot(time_stamps, values, label=page_name)
+        axis[1].plot(time_stamps, values, label=page_name, alpha=0.8)
     axis[1].set_title("edits")
     axis[1].legend(fontsize = "xx-small")
 
