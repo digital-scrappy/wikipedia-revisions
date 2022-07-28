@@ -51,9 +51,57 @@ structural topic modelling in R
 berttopic
 
 * Understanding Wikipedia
-** Size of page content probably matters
-For now I'll try to find an acceptable minimum page size
 ** Qualitative analysis of edits
+*** Pages Analyzed
+**** Operations Management
+http://en.wikipedia.org/?curid=1993994
+
+- Median edits per month: 4.0
+- Mean edits per month: 6.5
+- Standard deviation: 8.0
+
+Operations Management started it's life in 2005 with very little changes up until 2013, then big spikes in 2013 and 2014 (40-60 edits per month) and then a trickle down towards inactivity again ~ 2-5 edits per month. The spikes are exclusively caused by a group of 6 users who always were responsible for at least 50% of the edits in the months of the spikes.
+
+These users with the high amount of edits added new content to the page. Sometimes edits got reverted (eg.: Tracteur adding unecessary pictures in 2014-03), still most of these contributions got added in good will and extended the page.
+
+Contributions by users that had less contributions in the months of the Spikes usually were reverts (of unnecessary or wrong information) and formatting/typo fixes.
+**** Financial analyst
+http://en.wikipedia.org/?curid=782266
+
+- Median edits per month: 3
+- Mean edits per month:   5.90
+- Standard deviation:     9.57
+
+Similar page to Operations Management edits mostly done by 3 users, the spikes were mostly due to the user Fintor extending the page and the additions were not relevant to any events happening in the world at that time.
+
+**** Referee
+http://en.wikipedia.org/?curid=400892
+
+- Median edits per month: 4
+- Mean edits per month:   6.5
+- Standard deviation:     8.4
+dropped one outlier:
+- Median edits per month: 4
+- Mean edits per month:   6
+- Standard deviation:     5.6
+
+Besides 2021-03 Referee is a pretty calm page which is to be expected considering the occupation probably did not change much in the last 20 years.
+
+**** Models
+- Median edits per month: 14
+- Mean edits per month:   20
+- Standard deviation:     18.666
+
+Models seems like a more healthy page, ie. the edits are distributed much more evenly and they follow a trend. We see a spike after COVID (the first spike is to early 2019-10), but it seems none of the edits are covid related (also no covid related changes in 2020-04). The COVID spike could also be due to people having more time to edit wikipedia pages because of COVID, since the spike slowly trails off.
+
+*** Learnings from Page_Analysis.ipynb
+1. Selecting pages by page lenght might not be the best strategy, average/median edit activity could be much more usefull.
+2. Still it seems like we need bigger datasets to make the data smoother.
+** Ways to accumulate more and bigger pages per Occupational category
+- add technology pages
+- use minor or broad detail level for the occupational classification system
+** Size of page content probably matters
+For now I'll try to find an acceptable minimum page size  
 ** Spike after Page inception?
 The hypothesis:
 The number of edit spikes after pages creation and then levels of as the page has gotten to an acceptable/complete state.
@@ -65,9 +113,11 @@ The number of edit spikes after pages creation and then levels of as the page ha
   
 ** Hypothesis: The Beginnings of Wikipedia and Pages are chaotic
 Should we just give Wikipedia and Occupation pages some time to settle down? (1 or 2 years?)
+For now it seems like there is no consistencey between pages for when they settle down.
 
 ** Watch out for stubs?
 Is there a way to track stubs and should we only consider pages after loosing their stub status?
+
 
 * Methodological notes
 The estimates of the oews estimates are calculated for a specific month (in our case I selected only the ones for May) but they rely on the 6 most recent surveys (2 per year) to produce an estimate.
