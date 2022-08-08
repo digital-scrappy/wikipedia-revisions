@@ -1,55 +1,81 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-
 import sqlite3
-from datetime import datetime
-from Occupation import Occupation
-import json 
-
-from matplotlib import pyplot as plt
-from get_page_length_subset_indices import get_subset_indices
-from plot_page_statistics import plot_page_stats
-from __future__ import print_function
-from ipywidgets import interact, interactive, fixed, interact_manual
-import ipywidgets as widgets
+import json
+from scipy.stats import spearmanr
+from numpy import mean, diff
+import pandas as pd
 
 
+new_db_path = "/home/scrappy/data/csh/aggregated_edits.db"
 
-
-
-
-
-def plot_page(occ_list, idx):
-    occ = Occupation(*occ_list[idx])
-    print(occ.lenient_links)
-    print(occ.strict_links)
-    plot_page_stats(occ)
-    
-    
-
-
-
-
-db_path = "/home/scrappy/data/csh/aggregated_edits.db"
-
-
-page_indices = [ i  for i in  get_subset_indices("test.json",10000)]
-
-
-con = sqlite3.connect(db_path)
+con = sqlite3.connect(new_db_path)
 cur = con.cursor()
-cur.execute(f"Select * from occupations Where id IN {tuple(page_indices)}")
-occupations = cur.fetchall()
 
 
+query = f"SELECT occ_title, strict_edit_sum, tot_emp, a_mean FROM occupations "
 
+cur.execute(query)
+data = cur.fetchall()
+df = pd.DataFrame({"occ_title": [],
+                   "stric_edit_sum": [],
+                   "tot_emp": [],
+                   "a_mean": [],
+                   "rho_emp" : [],
+                   "rho_wage" : [],
+                   "rho_emp_diff" : [],
+                   "rho_wage_diff" : [],
+                   "pval_emp" : [],
+                   "pval_wage" : [],
+                   "pval_emp_diff" : [],
+                   "pval_wage_diff" : []})
+                   
 
+for occ in data:
+    occ_title = occ[0]
+    edit_sum = json.loads(occ[1])
+    tot_emp = json.loads(occ[2])
+    a_mean = json.loads(occ[3])
 
-plot_page(occupations, 20)
+    if len(tot_emp) != len(edit_sum) or len(a_mean) != len(edit_sum):
+        continue
+    all_lists = edit_sum.copy() + tot_emp.copy() + a_mean.copy()
+    if not all([isinstance(item, int) for item in all_lists ]):
+        continue
+    '''
+o
+                   "stric_edit_sum": [],
+                   "tot_emp": [],
+                   "a_mean": [],
+                   "rho_epm" : [],
+                   "rho_wage" : [],
+                   "rho_emp-diff" : [],
+                   "rho_wage-diff" : []
+                   "pval_epm" : [],
+                   "pval_wage" : [],
+                   "pval_emp_diff" : [],
+                   "pval_wage_diff" : []})
 
+'''
+    rho, pval = spearmanr(edit_sum, tot_emp)
+    rho_emp = rho
+    pval_emp = pval
 
+    rho, pval = spearmanr(edit_sum[1:], diff(tot_emp))
+    rho_emp_diff = rho
+    pval_emp_diff = pval
 
+    rho, pval = spearmanr(edit_sum, a_mean)
+    rho_wage = rho
+    pval_wage = pval
 
+    rho, pval = spearmanr(edit_sum[1:], diff(a_mean))
+    rho_wage_diff = rho
+    pval_wage_diff = pval
+
+    df.loc[len(df.index)] = [occ_title, edit_sum,
+                             tot_emp, a_mean,
+                             rho_emp, rho_wage,
+                             rho_emp_diff, rho_wage_diff,
+                             pval_emp, pval_wage,
+                             pval_emp_diff, pval_wage_diff] 
 
 
