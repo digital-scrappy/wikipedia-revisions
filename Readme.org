@@ -1,13 +1,24 @@
 #+Title: Documentation for various helper functions
-* Code specific Information
+* Getting started
+** Environment Setup
+Jakob manages his Dependencies using [[https://python-poetry.org/docs/][poetry]] it's a python dependency management tool. 
+Jakob actually installed it using his package manager which they don't recommend but he does not fully understand why. (I think there should also be a ubuntu package) 
+
+But it's also straightforward to install the dependencies using =pip install -r requirements.txt=
+If some dependencies are missing in the requirements.txt thats because Jakob forgot to run =poetry export= or someone else installed something using pip without exporting.
+
+** Data sharing
+Data goes in the =/csh/data/= 
+Jakob proposes [[https://syncthing.net/][syncthing]] a decentralized file sharing software (there is no cloud everything is on our computers yay) 
+It is not the safest (if one person deletes files they could be gone for everyone) so it could be good to keep seperate backups at certain points.
+
+
+
+
 ** Information and Usefull Software
-I guess the most interesting scripts currently are located in =the Analysis/= directory
-For now since the whole execution only takes a fraction of a second I am not using notebooks
+I guess the most interesting scripts currently are located in the =Analysis/= directory
 
 *** Dependency management
-I manage dependencies using poetry it's a python dependency management tool. 
-But it's also straightforward to install the dependencies using =pip install -r requirements.txt=
-If some dependencies are missing in the requirements.txt thats because I (jakob) forgot to run =poetry export= in that case write me an angry email :)
 
 *** Sqlite utils
 - sqlitebrowser
@@ -19,36 +30,17 @@ creating an OAuth consumer for higher request limit can be done here (after crea
 ** Requirements
 can be either installed via poetry or pip using `pip install -r requirements.txt`
 
-** Important functions / files
-
-*** get_pages_for_occupations()
-A function to retrieve the candidate links the top n link returned by wikipedia search for each occupation
-
-
-Args:
- - in_path (str) : the path to the xlsx file holding the bls soc structure
-
- - db_path (str) : the path to the sqlite db storing the data
-
- - group_level (str): The the level at which to extract occupations can be one of either ["Minor  Group", "Broad Group", "Detailed Occupation"]
-
- - srlimit (int) : the number of top search results to use
-
-
-Returns:
-  None
-
- 
-*** terminal_interface.py
-
-a terminal programm for selecting from the candidate links
-
-
 
 ** TODO learn about following software
 tomotopy
 structural topic modelling in R
 berttopic
+
+
+
+* Next Steps
+
+** Seasonal decomposition no edits
 
 * Understanding Wikipedia
 ** Qualitative analysis of edits
