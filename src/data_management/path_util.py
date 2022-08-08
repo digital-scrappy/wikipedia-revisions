@@ -11,6 +11,9 @@ if hostname == "yocto":
 elif hostname == "Maria":
     #just an example below
     base_path = Path("/home/Maria/Projects/csh")
+elif hostname == "LAPTOP-SCIFPBE4":
+    #just an example below
+    base_path = Path("C:\\Users\\leond\\Documents\\Github\\csh")
 else:
     base_path = Path(os.getcwd())
     parents = 0
