@@ -13,22 +13,18 @@ Jakob proposes [[https://syncthing.net/][syncthing]] a decentralized file sharin
 It is not the safest (if one person deletes files they could be gone for everyone) so it could be good to keep seperate backups at certain points.
 
 
+** Sqlite utils
+- [[https://sqlitebrowser.org/dl/][sqlitebrowser]]
+  for viewing the databases
 
 
 ** Information and Usefull Software
 I guess the most interesting scripts currently are located in the =Analysis/= directory
 
-*** Dependency management
 
-*** Sqlite utils
-- sqlitebrowser
-  for viewing the databases
  
 ** Wikipedia api
 creating an OAuth consumer for higher request limit can be done here (after creating a WikiMedia account) https://meta.wikimedia.org/wiki/Special:OAuthConsumerRegistration/propose
-
-** Requirements
-can be either installed via poetry or pip using `pip install -r requirements.txt`
 
 
 ** TODO learn about following software
