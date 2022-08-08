@@ -12,12 +12,15 @@ Data goes in the =/csh/data/=
 Jakob proposes [[https://syncthing.net/][syncthing]] a decentralized file sharing software (there is no cloud everything is on our computers yay) 
 It is not the safest (if one person deletes files they could be gone for everyone) so it could be good to keep seperate backups at certain points.
 
-*** Sqlite utils
 
+** Sqlite utils
+- [[https://sqlitebrowser.org/dl/][sqlitebrowser]]
+  for viewing the databases
 
 
 ** Information and Usefull Software
 I guess the most interesting scripts currently are located in the =Analysis/= directory
+
 
  
 ** Wikipedia api
