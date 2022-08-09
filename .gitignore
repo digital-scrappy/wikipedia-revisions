@@ -4,3 +4,4 @@ dist/
 __pycache__/
 *checkpoint.ipynb
 .ipynb_checkpoints/
+.idea/
