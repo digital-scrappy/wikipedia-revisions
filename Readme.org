@@ -1,4 +1,4 @@
-#+Title: Documentation for various helper functions
+#+Title: Project Documentation 
 * Getting started
 ** Environment Setup
 Jakob manages his Dependencies using [[https://python-poetry.org/docs/][poetry]] it's a python dependency management tool. 

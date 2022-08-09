@@ -21,6 +21,6 @@ else:
         parents += 1
     base_path = base_path.parents[parents]
 
-data_path = base_path / "data" 
+data_path = base_path / "data"
 secrets_path = base_path / "secrets"
 revisions_path = data_path / "revisions"

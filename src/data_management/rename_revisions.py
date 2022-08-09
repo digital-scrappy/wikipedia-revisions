@@ -1,5 +1,5 @@
 import os
-from path_util import data_path, revisions_path
+from path_util import  revisions_path
 import json
 
 for occ_dir in os.listdir(revisions_path):
@@ -14,8 +14,3 @@ for occ_dir in os.listdir(revisions_path):
             with open(new_revison_path, "w") as handle:
                 json.dump(revision, handle)
             os.remove(old_revision_path)
-
-                
-        
-
-        
