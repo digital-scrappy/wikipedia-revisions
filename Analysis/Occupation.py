@@ -26,7 +26,7 @@ class Occupation:
     A_PCT90: str
     strict_revisions: str
     lenient_revisions: str
-
+        
 
     def __post_init__(self):
         """take all the columns that are stored in json and turn them into python data structures"""
