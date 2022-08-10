@@ -120,7 +120,7 @@ for row in bls_reports["oesm21nat"][-1].itertuples():
     
 
 # adding all the older reports to the occupations dictionary
-occ_21_keys =  list(occupations.keys())
+occ_21_keys = list(occupations.keys())
 for name, value in bls_reports.items():
     for row in value[-1].itertuples():
         row = row._asdict()
