@@ -40,7 +40,7 @@ def plot_page_stats(occ : Occupation):
     oews_data_start = 9 - len(a_mean)
     
     axis[2].plot(oews_timestamps[oews_data_start:],a_mean,label="A_Mean")
-    axis[2].set_title("A_Mean")
+    axis[2].set_title("A_Median")
     axis[2].legend(fontsize = "xx-small")
 
     axis[3].plot(oews_timestamps[oews_data_start:],tot_emp,label="TOT_EMP")

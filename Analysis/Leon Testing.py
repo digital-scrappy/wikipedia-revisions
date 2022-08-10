@@ -7,7 +7,7 @@ for occ_dict in all_revs:
     for occ_name, revisions_dict in occ_dict.items():
         for date, list_revisions_date in revisions_dict.items():
             user_contrib_monthly = contributions_by_user(list_revisions_date)
-            print(occ_name, date, x)
+            print(occ_name, date, user_contrib_monthly)
             break
 
     break
