@@ -107,6 +107,8 @@ For now it seems like there is no consistencey between pages for when they settl
 Is there a way to track stubs and should we only consider pages after loosing their stub status?
 
 
+* Topic Modelling
+For BERTopic it makes sense to split the pages into paragraphs since different paragraphs will yield different topics. 
 * Methodological notes
 The estimates of the oews estimates are calculated for a specific month (in our case I selected only the ones for May) but they rely on the 6 most recent surveys (2 per year) to produce an estimate.
 
