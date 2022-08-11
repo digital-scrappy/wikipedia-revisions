@@ -109,6 +109,20 @@ Is there a way to track stubs and should we only consider pages after loosing th
 
 * Topic Modelling
 For BERTopic it makes sense to split the pages into paragraphs since different paragraphs will yield different topics. 
+** BERTopic Algorithm
+*** Embed Documents
+*** Cluster Documents
+**** Dimensionality Reduction
+default algorithm is  UMAP
+can be changed based on this [[https://maartengr.github.io/BERTopic/getting_started/dim_reduction/dim_reduction.html][guide]]
+
+**** Density Based Clustering - HDBSCAN algorithm
+starts with estimate of density -> core distance (x) = distance to =kth= nearest neighbor
+$core_k(x)$ using the =core distance= we can define the =mutual reachability distance= as
+
+\begin{equation}
+d_{mreach-k}(a,b) = max \{\begin{array}&core_k(a)\\ &core_k(b)\\ &d(a,b)\end{array}\}
+\end{equation}
 * Methodological notes
 The estimates of the oews estimates are calculated for a specific month (in our case I selected only the ones for May) but they rely on the 6 most recent surveys (2 per year) to produce an estimate.
 
