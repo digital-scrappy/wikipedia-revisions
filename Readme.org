@@ -110,6 +110,7 @@ Is there a way to track stubs and should we only consider pages after loosing th
 * Topic Modelling
 For BERTopic it makes sense to split the pages into paragraphs since different paragraphs will yield different topics. 
 ** BERTopic Algorithm
+[[https://maartengr.github.io/BERTopic/getting_started/parameter%20tuning/parametertuning.html][Guide for Hyperparamater configuration]]
 *** Embed Documents
 *** Cluster Documents
 **** Dimensionality Reduction
@@ -117,16 +118,25 @@ default algorithm is  UMAP
 can be changed based on this [[https://maartengr.github.io/BERTopic/getting_started/dim_reduction/dim_reduction.html][guide]]
 
 **** Density Based Clustering - HDBSCAN algorithm
-*Might be important since we don't want to cluster away topics Like COVID-19*
+*Tweaking Hyper-Parameters here could be very important since we don't want to cluster away topics like COVID-19*
 [[https://hdbscan.readthedocs.io/en/latest/how_hdbscan_works.html][HDBSCAN documentation]]
 
 ***** Transforming the space
+
+
 Starts with the creation of a distance matrix based intitially on an estimate of density -> core distance (x) = distance to =kth= nearest neighbor
 $core_k(x)$ and then using the =core distance= defines the =mutual reachability distance= as: $d_{mreach-k}(a,b) = max \begin{Bmatrix}core_k(a)\\ core_k(b)\\ d(a,b)\end{Bmatrix}$.
 
 ***** Building the minimum spanning tree
-The distance matrix is then used to build a weighted graph where data points are represented by vertices and the corresponding mutual reachability distance values are the weights of the edges between them. Instead of repeatedly dropping edges that are above a threshold that gets lowered every iteration (very computationally expensive). The minimum spanning tree is built via [[https://en.wikipedia.org/wiki/Prim%27s_algorithm][Prim's algorithm]]
+The distance matrix is then used to build a weighted graph where data points are represented by vertices and the corresponding mutual reachability distance values are the weights of the edges between them.
 
+Instead of repeatedly dropping edges that are above a threshold that gets lowered every iteration (very computationally expensive). The minimum spanning tree is built via [[https://en.wikipedia.org/wiki/Prim%27s_algorithm][Prim's algorithm]] or "if the data lives in metric space" (? Jakob does not know about metric space and this is one level to deep) other even faster algorithms.
+
+After the minimal spanning tree is built, it is organized into a hierarchical structure based on the distance between nodes. Then the maximum distance for at which an edge becomes the edge at which a cluster should be split is iteratively reduced.
+A minimum cluster size is defined and based on this, splits between clusters either result in two clusters or if one of them is smaller than the minimum size the split just results in a cluster loosing a point/points.
+Finally clusters are selected based on cluster persistance $\lambda_{birth}$ and $\lambda_{death}$ where $\lambda = \frac{1}{distance}$  a clusters birth is when it comes to be out of the split of a parent cluster and it's death is when it becomes smaller than the minimum cluster size. For each point that a cluster loosen we can define $\lambda_p$ as the distance value at which the point was separated from the cluster, $\lambda_p$ has to fall between $\lambda_{birth}$ and $\lambda_{death}$. Now cluster stability can be computed as $\Lambda = \sum_{p\ \in \ cluster}({\lambda_p - \lambda_{birth}})$ 
+
+Now firstly all leaf are selected as clusters. Working up from the leaves, if $\Lambda$ of the parent node is bigger than the sum of all the children we select the parent and deselect the children. If the sum of all children $\Lambda$ is greater than the parents $\Lambda$ the parent is assigned the sum of childrens $\Lambda$ and we move up in the tree.
 * Methodological notes
 The estimates of the oews estimates are calculated for a specific month (in our case I selected only the ones for May) but they rely on the 6 most recent surveys (2 per year) to produce an estimate.
 
