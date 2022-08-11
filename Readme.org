@@ -120,6 +120,7 @@ can be changed based on this [[https://maartengr.github.io/BERTopic/getting_star
 starts with estimate of density -> core distance (x) = distance to =kth= nearest neighbor
 $core_k(x)$ using the =core distance= we can define the =mutual reachability distance= as:
 $d_{mreach-k}(a,b) = max \begin{Bmatrix}core_k(a)\\ core_k(b)\\ d(a,b)\end{Bmatrix}$
+test
 
 * Methodological notes
 The estimates of the oews estimates are calculated for a specific month (in our case I selected only the ones for May) but they rely on the 6 most recent surveys (2 per year) to produce an estimate.
