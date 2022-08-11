@@ -117,8 +117,15 @@ default algorithm is  UMAP
 can be changed based on this [[https://maartengr.github.io/BERTopic/getting_started/dim_reduction/dim_reduction.html][guide]]
 
 **** Density Based Clustering - HDBSCAN algorithm
-starts with estimate of density -> core distance (x) = distance to =kth= nearest neighbor
-$core_k(x)$ using the =core distance= we can define the =mutual reachability distance= as: $d_{mreach-k}(a,b) = max \begin{Bmatrix}core_k(a)\\ core_k(b)\\ d(a,b)\end{Bmatrix}$ test
+*Might be important since we don't want to cluster away topics Like COVID-19*
+[[https://hdbscan.readthedocs.io/en/latest/how_hdbscan_works.html][HDBSCAN documentation]]
+
+***** Transforming the space
+Starts with the creation of a distance matrix based intitially on an estimate of density -> core distance (x) = distance to =kth= nearest neighbor
+$core_k(x)$ and then using the =core distance= defines the =mutual reachability distance= as: $d_{mreach-k}(a,b) = max \begin{Bmatrix}core_k(a)\\ core_k(b)\\ d(a,b)\end{Bmatrix}$.
+
+***** Building the minimum spanning tree
+The distance matrix is then used to build a weighted graph where data points are represented by vertices and the corresponding mutual reachability distance values are the weights of the edges between them. Instead of repeatedly dropping edges that are above a threshold that gets lowered every iteration (very computationally expensive). The minimum spanning tree is built via [[https://en.wikipedia.org/wiki/Prim%27s_algorithm][Prim's algorithm]]
 
 * Methodological notes
 The estimates of the oews estimates are calculated for a specific month (in our case I selected only the ones for May) but they rely on the 6 most recent surveys (2 per year) to produce an estimate.
