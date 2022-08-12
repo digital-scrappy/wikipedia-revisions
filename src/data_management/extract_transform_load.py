@@ -2,21 +2,22 @@ from path_util import data_path, revisions_path
 import os
 from  zipfile import ZipFile
 import pandas as pd
+from datetime import datetime
 import json
 import sqlite3
 from Occupation import Occupation
 
 bls_source_path = data_path / "bls" / "source"
-db_path = data_path / "data_bases" / "all_occupations.db" 
+db_path = data_path / "data_bases" / "all_occupations.db"
 
 if os.path.exists(db_path):
     os.remove(db_path)
 
 #There are many different names for the bls files in the zip archives here is a proper mapping 
-bls_reports = {"oesm21nat" : ["oesm21nat/national_M2021_dl.xlsx", "o_group"],
-               "oesm03nat" : ["national_may2003_dl.xls", "group"],
+bls_reports = {"oesm03nat" : ["national_may2003_dl.xls", "group"],
                "oesm04nat" : ["national_may2004_dl.xls", "group"],
-               "oesm05nat" : ["national_may2005_dl.xls", "group"], 
+               "oesm05nat" : ["national_may2005_dl.xls", "group"], # add 2006 here
+               "oesm06nat" : ["national_may2006_dl.xls", "group"],
                "oesm07nat" : ["national_May2007_dl.xls", "group"],
                "oesm08nat" : ["national__M2008_dl.xls", "group"],
                "oesm09nat" : ["national_dl.xls", "group"], 
@@ -30,9 +31,10 @@ bls_reports = {"oesm21nat" : ["oesm21nat/national_M2021_dl.xlsx", "o_group"],
                "oesm17nat" : ["oesm17nat/national_M2017_dl.xlsx", "occ_group"],
                "oesm18nat" : ["oesm18nat/national_M2018_dl.xlsx", "occ_group"],
                "oesm19nat" : ["oesm19nat/national_M2019_dl.xlsx", "o_group"],
-               "oesm20nat" : ["oesm20nat/national_M2020_dl.xlsx", "o_group"]}
+               "oesm20nat" : ["oesm20nat/national_M2020_dl.xlsx", "o_group"],
+               "oesm21nat" : ["oesm21nat/national_M2021_dl.xlsx", "o_group"]}
 
-numeric_col_names = [ "tot_emp", "h_mean", "a_mean", "h_pct10", "h_pct25", "h_median", "h_pct75", "h_pct90", "a_pct10", "a_pct25", "a_median", "a_pct75", "a_pct90"]
+numeric_col_names = ["tot_emp", "h_mean", "a_mean", "h_pct10", "h_pct25", "h_median", "h_pct75", "h_pct90", "a_pct10", "a_pct25", "a_median", "a_pct75", "a_pct90"]
 
 empty_occ_columns = {"tot_emp": [], "h_mean": [], "a_mean": [], "h_pct10": [], "h_pct25": [],
                      "h_median": [], "h_pct75": [], "h_pct90": [], "a_pct10": [], "a_pct25": [], "a_median": [], "a_pct75": [], "a_pct90": []}
@@ -58,6 +60,9 @@ with open(links_path) as links_file:
 # opening all the zip archives and appending the corresponding dataframes to bls_reports
 for zip_name in os.listdir(bls_source_path):
     zip_path = bls_source_path / zip_name
+
+    year = int(zip_name[4:6]) # remember the year of each file
+
     with ZipFile(zip_path) as zip_file:
         
         #removing the .zip at the end of the file name to get the name of the data 
@@ -71,10 +76,15 @@ for zip_name in os.listdir(bls_source_path):
 
             # converting all numeric columns to numbers and if not possible to nan 
             df[numeric_col_names] = df[numeric_col_names].apply(lambda x: pd.to_numeric(x, errors="coerce"))
+
+
+
+            print(df)
+
             bls_reports[bls_name].append(df)
 
 
-occupations =  {}
+occupations = {}
 
 # initialization of every occupation in the occupations dictionary
 for row in bls_reports["oesm21nat"][-1].itertuples():
@@ -83,8 +93,8 @@ for row in bls_reports["oesm21nat"][-1].itertuples():
     if detail_level == "total":
         continue
     occ_code = row["occ_code"]
-    occupations[occ_code] = {"tot_emp": [], "h_mean": [], "a_mean": [], "h_pct10": [], "h_pct25": [],
-                     "h_median": [], "h_pct75": [], "h_pct90": [], "a_pct10": [], "a_pct25": [], "a_median": [], "a_pct75": [], "a_pct90": []}
+    occupations[occ_code] = {"tot_emp": {}, "h_mean": {}, "a_mean": {}, "h_pct10": {}, "h_pct25": {},
+                     "h_median": {}, "h_pct75": {}, "h_pct90": {}, "a_pct10": {}, "a_pct25": {}, "a_median": {}, "a_pct75": {}, "a_pct90": {}}
 
     occupations[occ_code]["occ_group"] = detail_level
     occupations[occ_code]["occ_title"] = row["occ_title"]
@@ -122,6 +132,8 @@ for row in bls_reports["oesm21nat"][-1].itertuples():
 # adding all the older reports to the occupations dictionary
 occ_21_keys = list(occupations.keys())
 for name, value in bls_reports.items():
+    timestamp = datetime(int("20" + name[4:6]), 5, 1).isoformat()
+
     for row in value[-1].itertuples():
         row = row._asdict()
 
@@ -131,7 +143,7 @@ for name, value in bls_reports.items():
 
         #appending the stats 
         for key in occ_stat_keys:
-            occupations[row["occ_code"]][key].append(row[key])
+            occupations[row["occ_code"]][key][timestamp] = row[key]
 
 table_creation = '''CREATE TABLE occupations(
 idx integer primary key,
