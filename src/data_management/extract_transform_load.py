@@ -79,7 +79,6 @@ for zip_name in os.listdir(bls_source_path):
 
             bls_reports[bls_name].append(df)
 
-
 occupations = {}
 
 # initialization of every occupation in the occupations dictionary
