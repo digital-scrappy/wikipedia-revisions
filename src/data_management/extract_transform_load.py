@@ -61,8 +61,6 @@ with open(links_path) as links_file:
 for zip_name in os.listdir(bls_source_path):
     zip_path = bls_source_path / zip_name
 
-    year = int(zip_name[4:6]) # remember the year of each file
-
     with ZipFile(zip_path) as zip_file:
         
         #removing the .zip at the end of the file name to get the name of the data 
@@ -78,6 +76,7 @@ for zip_name in os.listdir(bls_source_path):
             df[numeric_col_names] = df[numeric_col_names].apply(lambda x: pd.to_numeric(x, errors="coerce"))
 
             bls_reports[bls_name].append(df)
+
 
 occupations = {}
 
