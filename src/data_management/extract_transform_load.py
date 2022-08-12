@@ -77,10 +77,6 @@ for zip_name in os.listdir(bls_source_path):
             # converting all numeric columns to numbers and if not possible to nan 
             df[numeric_col_names] = df[numeric_col_names].apply(lambda x: pd.to_numeric(x, errors="coerce"))
 
-
-
-            print(df)
-
             bls_reports[bls_name].append(df)
 
 
