@@ -5,31 +5,31 @@ from split_page_into_paragraphs import split_page_into_paragraphs
 import numpy as np
 import os
 import json
+from datetime import datetime
 
 
+docs = {}
 
-docs = []
+rev_dirs = ["15-1211", "15-1221", "15-1231", "15-1242", "15-1244", "15-1251", "15-1252", "15-1253", "15-1254"]
 
-rev_dirs = ["11-1011", "11-1021"]
+rev_dirs = ["15-1211", "15-1221", "15-1231", "15-1242", "15-1244", "15-1251", "15-1252", "15-1253", "15-1254"]
 
 for rev_dir in rev_dirs:
     rev_dir_path = revisions_path / rev_dir
     page_dirs = os.listdir(rev_dir_path)
 
-    for page_dir in page_dirs:
-        page_dir_path = rev_dir_path / page_dir
+    for page_name in page_dirs:
+        docs[page_name] = {}
+        page_dir_path = rev_dir_path / page_name
         rev_file_list = os.listdir(page_dir_path)
+
         for file_name in rev_file_list[::5]:
             file_path = page_dir_path / file_name
             with open(file_path, "r") as rev_file:
-                try:
-                    rev = json.load(rev_file)["*"]
-                except KeyError:
-                    print("KeyError")
-                else:
-                    for paragraph in split_page_into_paragraphs(rev):
-                        docs.append(paragraph)
-        
+                rev = json.load(rev_file)
+                docs["page_name"].append(rev)
+
+                
 
 
 topic_model = BERTopic(language="english",calculate_probabilities=True, verbose=True)

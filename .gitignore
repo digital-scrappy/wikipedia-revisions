@@ -1,7 +1,8 @@
-*.~undo-tree~
+*~undo-tree~
 .venv/
 dist/
 __pycache__/
 *checkpoint.ipynb
 .ipynb_checkpoints/
 .idea/
+.ipynb
