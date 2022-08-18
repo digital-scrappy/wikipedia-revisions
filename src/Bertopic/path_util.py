@@ -24,4 +24,3 @@ else:
 data_path = base_path / "data"
 secrets_path = base_path / "secrets"
 revisions_path = data_path / "revisions"
-old_database_path = data_path / "data_bases" / "aggregated_edits.db"
