@@ -27,16 +27,16 @@ I guess the most interesting scripts currently are located in the =Analysis/= di
 creating an OAuth consumer for higher request limit can be done here (after creating a WikiMedia account) https://meta.wikimedia.org/wiki/Special:OAuthConsumerRegistration/propose
 
 
-** TODO learn about following software
-tomotopy
-structural topic modelling in R
-berttopic
-
-
 
 * Next Steps
 
-** Seasonal decomposition no edits
+** TODO Add lenient and strict columns in ETL
+** TODO Add gender information column in ETL
+** TODO Get backlinks with Wikimedia API and add to ETL
+[[https://www.mediawiki.org/w/api.php?action=help&modules=query%2Blinkshere][links here]]
+** TODO Get topics of complete articles with BERTopic
+
+
 
 * Understanding Wikipedia
 ** Qualitative analysis of edits
@@ -137,6 +137,9 @@ A minimum cluster size is defined and based on this, splits between clusters eit
 Finally clusters are selected based on cluster persistance $\lambda_{birth}$ and $\lambda_{death}$ where $\lambda = \frac{1}{distance}$  a clusters birth is when it comes to be out of the split of a parent cluster and it's death is when it becomes smaller than the minimum cluster size. For each point that a cluster loosen we can define $\lambda_p$ as the distance value at which the point was separated from the cluster, $\lambda_p$ has to fall between $\lambda_{birth}$ and $\lambda_{death}$. Now cluster stability can be computed as $\Lambda = \sum_{p\ \in \ cluster}({\lambda_p - \lambda_{birth}})$ 
 
 Now firstly all leaf are selected as clusters. Working up from the leaves, if $\Lambda$ of the parent node is bigger than the sum of all the children we select the parent and deselect the children. If the sum of all children $\Lambda$ is greater than the parents $\Lambda$ the parent is assigned the sum of childrens $\Lambda$ and we move up in the tree.
+
+* Comparing Embeddings?
+https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2
 * Methodological notes
 The estimates of the oews estimates are calculated for a specific month (in our case I selected only the ones for May) but they rely on the 6 most recent surveys (2 per year) to produce an estimate.
 
