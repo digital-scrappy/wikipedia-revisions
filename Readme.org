@@ -37,7 +37,6 @@ creating an OAuth consumer for higher request limit can be done here (after crea
 ** TODO Get topics of complete articles with BERTopic
 
 
-
 * Understanding Wikipedia
 ** Qualitative analysis of edits
 *** Pages Analyzed
