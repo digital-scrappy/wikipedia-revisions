@@ -5,7 +5,6 @@ from bin_revision_history import month_bin_revisions
 
 @dataclass
 class Occupation:
-
     id: int
     occ_code: str
     occ_title: str

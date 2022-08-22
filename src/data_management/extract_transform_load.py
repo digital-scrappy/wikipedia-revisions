@@ -83,22 +83,21 @@ for zip_name in os.listdir(bls_source_path):
 
 # gender race information
 gender_race_df = pd.read_excel(bls_gender_race_excel, skiprows = 5)
-gender_race_df = df.iloc[3: , :] # delete first 3 rows
-gender_race_df = df.iloc[:-2 , :] # delete last 2 rows
+gender_race_df = gender_race_df.iloc[3: , :] # delete first 3 rows
+gender_race_df = gender_race_df.iloc[:-2 , :] # delete last 2 rows
 
 gender_race_df = gender_race_df.rename(columns={gender_race_df.columns[0]: 'occ_name'})
 gender_race_df = gender_race_df.rename(columns={gender_race_df.columns[1]: 'total_emp'})
-gender_race_df = gender_race_df.rename(columns={gender_race_df.columns[4]: 'African American'})
+gender_race_df = gender_race_df.rename(columns={gender_race_df.columns[4]: 'African_American'})
 gender_race_df = gender_race_df.rename(columns={gender_race_df.columns[6]: 'Hispanic'})
 gender_race_df = gender_race_df.replace('–', None)
+gender_race_df['occ_name'] = gender_race_df['occ_name'].str.lower()
 
 gender_race_df["Women"] = (gender_race_df["Women"].astype(float) / 100)
 gender_race_df["White"] = (gender_race_df["White"].astype(float) / 100)
-gender_race_df["African American"] = (gender_race_df"African American"].astype(float) / 100)
+gender_race_df["African_American"] = (gender_race_df["African_American"].astype(float) / 100)
 gender_race_df["Asian"] = (gender_race_df["Asian"].astype(float) / 100)
 gender_race_df["Hispanic"] = (gender_race_df["Hispanic"].astype(float) / 100)
-
-
 
 occupations = {}
 
@@ -163,6 +162,20 @@ for name, value in bls_reports.items():
         for key in occ_stat_keys:
             occupations[row["occ_code"]][key][timestamp] = row[key]
 
+for occ_code, contents in occupations.items():
+    if contents["occ_title"].lower() in gender_race_df["occ_name"].tolist():
+        occupations[occ_code]["Women"] = gender_race_df[gender_race_df['occ_name'] == contents["occ_title"].lower()]['Women'].item()
+        occupations[occ_code]["White"] = gender_race_df[gender_race_df['occ_name'] == contents["occ_title"].lower()]['White'].item()
+        occupations[occ_code]["African_American"] = gender_race_df[gender_race_df['occ_name'] == contents["occ_title"].lower()]['African_American'].item()
+        occupations[occ_code]["Asian"] = gender_race_df[gender_race_df['occ_name'] == contents["occ_title"].lower()]['Asian'].item()
+        occupations[occ_code]["Hispanic"] = gender_race_df[gender_race_df['occ_name'] == contents["occ_title"].lower()]['Hispanic'].item()
+    else:
+        occupations[occ_code]["Women"] = None
+        occupations[occ_code]["White"] = None
+        occupations[occ_code]["African_American"] = None
+        occupations[occ_code]["Asian"] = None
+        occupations[occ_code]["Hispanic"] = None
+
 # adding to the database
 table_creation = '''CREATE TABLE occupations(
 idx integer primary key,
@@ -173,6 +186,11 @@ strict_links text,
 lenient_links text,
 rev_dirs text,
 tot_emp text,
+Women text,
+White text,
+African_American text,
+Asian text,
+Hispanic text,
 h_mean text,
 a_mean text,
 h_pct10 text,
@@ -192,9 +210,9 @@ cur.execute(table_creation)
 
 error_count = 0
 for occupation_dict in occupations.values():
-    occupation = Occupation(expected_lenght = 18, **occupation_dict)
+    occupation = Occupation(expected_lenght = 23, **occupation_dict)
         
-    cur.execute(f"INSERT INTO occupations VALUES (NULL,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", occupation.to_db()) 
+    cur.execute(f"INSERT INTO occupations VALUES (NULL,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", occupation.to_db())
     con.commit()
 
 print(error_count)

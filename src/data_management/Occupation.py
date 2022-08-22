@@ -13,6 +13,11 @@ class Occupation:
                  lenient_links: List[Tuple[str,str]],
                  rev_dirs: List[str],
                  tot_emp: List[float],
+                 Women: int,
+                 White: int,
+                 African_American: int,
+                 Asian: int,
+                 Hispanic: int,
                  h_mean: List[float],
                  a_mean: List[float],
                  h_pct10: List[float],
@@ -28,7 +33,7 @@ class Occupation:
                  ):
 
 
-        list_that_should_be_of_length = [ "tot_emp", "h_mean", "a_mean", "h_pct10", "h_pct25", "h_median", "h_pct75", "h_pct90", "a_pct10", "a_pct25", "a_median", "a_pct75", "a_pct90"]
+        list_that_should_be_of_length = ["tot_emp", "h_mean", "a_mean", "h_pct10", "h_pct25", "h_median", "h_pct75", "h_pct90", "a_pct10", "a_pct25", "a_median", "a_pct75", "a_pct90"]
         self.occ_code = occ_code
         self.occ_group = occ_group
         self.occ_title = occ_title
@@ -36,6 +41,11 @@ class Occupation:
         self.lenient_links = lenient_links
         self.rev_dirs = rev_dirs
         self.tot_emp = tot_emp
+        self.Women = Women
+        self.White = White
+        self.African_American = African_American
+        self.Asian = Asian
+        self.Hispanic = Hispanic
         self.h_mean = h_mean
         self.a_mean = a_mean
         self.h_pct10 = h_pct10
@@ -72,6 +82,11 @@ class Occupation:
                 json.dumps(self.lenient_links),
                 json.dumps(self.rev_dirs),
                 json.dumps(self.tot_emp),
+                json.dumps(self.Women),
+                json.dumps(self.White),
+                json.dumps(self.African_American),
+                json.dumps(self.Asian),
+                json.dumps(self.Hispanic),
                 json.dumps(self.h_mean),
                 json.dumps(self.a_mean),
                 json.dumps(self.h_pct10),
