@@ -1,8 +1,6 @@
 import sqlite3
 import json
-
-from matplotlib.font_manager import json_load
-from path_util import base_path, data_path, secrets_path
+from path_util import  data_path
 
 db_path = data_path / "aggregated_edits.db"
 

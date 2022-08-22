@@ -38,6 +38,7 @@ numeric_col_names = ["tot_emp", "h_mean", "a_mean", "h_pct10", "h_pct25", "h_med
 
 empty_occ_columns = {"tot_emp": [], "h_mean": [], "a_mean": [], "h_pct10": [], "h_pct25": [],
                      "h_median": [], "h_pct75": [], "h_pct90": [], "a_pct10": [], "a_pct25": [], "a_median": [], "a_pct75": [], "a_pct90": []}
+
 occ_stat_keys = empty_occ_columns.keys()
 
 links_path = data_path / "links.json"
@@ -110,17 +111,21 @@ for row in bls_reports["oesm21nat"][-1].itertuples():
     relevant_links_nested_2 = [links_dict[occ_code] for occ_code in relevant_link_keys]
 
     #sorry ...  just flattening lists and converting the inner lists to tuples 
-    relevant_links_nested_1 = [page for page_list in relevant_links_nested_2 for page in page_list]
-    relevant_links_list = [tuple(page) for page_list in relevant_links_nested_1 for page in page_list]
+    lenient_nested =  [ page for page_lists in relevant_links_nested_2 for page in page_lists[0]]
+    strict_nested =  [ page for page_lists in relevant_links_nested_2 for page in page_lists[1]]
+    
+
+    # sorry ... I don't know of a better way 
+    lenient_tuple_list = list(set([tuple(page) for page in lenient_nested]))
+    strict_tuple_list = list(set([tuple(page) for page in strict_nested]))
 
 
     # converting every [page_name, link] sublist to tuples and then converting the outer list to a set
-    relevant_links_set = list(set(relevant_links_list))
     relevant_revision_dirs = list(filter(lambda x: x.startswith(code_slice), revision_dirs))
     
-    occupations[occ_code]["links"] = relevant_links_set
+    occupations[occ_code]["strict_links"] = strict_tuple_list
+    occupations[occ_code]["lenient_links"] = lenient_tuple_list
     occupations[occ_code]["rev_dirs"] = relevant_revision_dirs
-    
     
 
 # adding all the older reports to the occupations dictionary
@@ -144,7 +149,8 @@ idx integer primary key,
 occ_code text,
 occ_group text,
 occ_title text,
-links text,
+strict_links text,
+lenient_links text,
 rev_dirs text,
 tot_emp text,
 h_mean text,
@@ -159,7 +165,7 @@ a_pct25 text,
 a_median text,
 a_pct75 text,
 a_pct90 text,
-noNaNs bool)
+missing_bls_values bool)
 '''
 cur.execute(table_creation)
 
@@ -168,7 +174,7 @@ error_count = 0
 for occupation_dict in occupations.values():
     occupation = Occupation(expected_lenght = 18, **occupation_dict)
         
-    cur.execute(f"INSERT INTO occupations VALUES (NULL,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", occupation.to_db()) 
+    cur.execute(f"INSERT INTO occupations VALUES (NULL,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", occupation.to_db()) 
     con.commit()
 
 print(error_count)
