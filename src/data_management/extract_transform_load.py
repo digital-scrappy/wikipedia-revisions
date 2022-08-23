@@ -4,9 +4,46 @@ from  zipfile import ZipFile
 import pandas as pd
 from datetime import datetime
 import json
+from json import JSONDecodeError
 import sqlite3
 from Occupation import Occupation
+def open_revisions(path):
+    revisions = []
+    for rev_name in os.listdir(path):
+            with open((path / rev_name)) as rev_file:
+                try:
+                    revision = json.load(rev_file)
+                except JSONDecodeError:
+                    continue
+                else:
+                    try:
+                        sub_set_revison = {"revid" : revision["revid"],
+                                        "user" : revision["user"],
+                                        "userid" : revision["userid"],
+                                        "timestamp" : revision["timestamp"],
+                                        "tags" : revision["tags"]}
+                    except KeyError:
+                        continue
+                    else:
+                        revisions.append(sub_set_revison)
 
+
+
+def get_revisions(dirs, page_list):
+    pages = {}
+    
+    for i in dirs:
+        top_path = revisions_path / i
+        
+        for page in os.listdir(top_path):
+            
+            if page in page_list and page not in list(pages.keys()):
+                
+                pages[page] = open_revisions(top_path / page)
+
+                
+
+    
 bls_source_path = data_path / "bls" / "source"
 bls_gender_race_excel = data_path / "bls" / "gender_race_hispanic" / "cpsaat11_gender, races, hispanic.xlsx"
 
@@ -147,6 +184,19 @@ for row in bls_reports["oesm21nat"][-1].itertuples():
     occupations[occ_code]["strict_links"] = strict_tuple_list
     occupations[occ_code]["lenient_links"] = lenient_tuple_list
     occupations[occ_code]["rev_dirs"] = relevant_revision_dirs
+
+
+    #slowing down this script by 2 minutes :)
+    page_names =  list(set(map(lambda x: x[0], strict_tuple_list + lenient_tuple_list)))
+
+    pages = get_revisions(page_names, rev_dirs)
+    
+    
+
+    
+
+
+
     
 
 # adding all the older reports to the occupations dictionary
