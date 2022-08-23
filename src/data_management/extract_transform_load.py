@@ -8,6 +8,8 @@ import sqlite3
 from Occupation import Occupation
 
 bls_source_path = data_path / "bls" / "source"
+bls_gender_race_excel = data_path / "bls" / "gender_race_hispanic" / "cpsaat11_gender, races, hispanic.xlsx"
+
 db_path = data_path / "data_bases" / "all_occupations.db"
 
 if os.path.exists(db_path):
@@ -34,10 +36,11 @@ bls_reports = {"oesm03nat" : ["national_may2003_dl.xls", "group"],
                "oesm20nat" : ["oesm20nat/national_M2020_dl.xlsx", "o_group"],
                "oesm21nat" : ["oesm21nat/national_M2021_dl.xlsx", "o_group"]}
 
-numeric_col_names = ["tot_emp", "h_mean", "a_mean", "h_pct10", "h_pct25", "h_median", "h_pct75", "h_pct90", "a_pct10", "a_pct25", "a_median", "a_pct75", "a_pct90"]
+numeric_col_names = ["tot_emp", "h_mean", "a_mean", "h_pct10", "h_pct25", "h_median", "h_pct75",
+                     "h_pct90", "a_pct10", "a_pct25", "a_median", "a_pct75", "a_pct90"]
 
-empty_occ_columns = {"tot_emp": [], "h_mean": [], "a_mean": [], "h_pct10": [], "h_pct25": [],
-                     "h_median": [], "h_pct75": [], "h_pct90": [], "a_pct10": [], "a_pct25": [], "a_median": [], "a_pct75": [], "a_pct90": []}
+empty_occ_columns = {"tot_emp": [], "h_mean": [], "a_mean": [], "h_pct10": [], "h_pct25": [], "h_median": [], "h_pct75": [],
+                     "h_pct90": [], "a_pct10": [], "a_pct25": [], "a_median": [], "a_pct75": [], "a_pct90": []}
 
 occ_stat_keys = empty_occ_columns.keys()
 
@@ -78,6 +81,26 @@ for zip_name in os.listdir(bls_source_path):
 
             bls_reports[bls_name].append(df)
 
+# gender race information
+gender_race_df = pd.read_excel(bls_gender_race_excel, skiprows = 5)
+gender_race_df = gender_race_df.iloc[3: , :] # delete first 3 rows
+gender_race_df = gender_race_df.iloc[:-2 , :] # delete last 2 rows
+
+gender_race_df = gender_race_df.rename(columns={gender_race_df.columns[0]: 'occ_name'})
+gender_race_df = gender_race_df.rename(columns={gender_race_df.columns[1]: 'total_emp'})
+gender_race_df = gender_race_df.rename(columns={gender_race_df.columns[2]: 'women'})
+gender_race_df = gender_race_df.rename(columns={gender_race_df.columns[3]: 'white'})
+gender_race_df = gender_race_df.rename(columns={gender_race_df.columns[4]: 'african_american'})
+gender_race_df = gender_race_df.rename(columns={gender_race_df.columns[5]: 'asian'})
+gender_race_df = gender_race_df.rename(columns={gender_race_df.columns[6]: 'hispanic'})
+gender_race_df = gender_race_df.replace('–', None)
+gender_race_df['occ_name'] = gender_race_df['occ_name'].str.lower()
+
+gender_race_df["women"] = (gender_race_df["women"].astype(float) / 100)
+gender_race_df["white"] = (gender_race_df["white"].astype(float) / 100)
+gender_race_df["african_american"] = (gender_race_df["african_american"].astype(float) / 100)
+gender_race_df["asian"] = (gender_race_df["asian"].astype(float) / 100)
+gender_race_df["hispanic"] = (gender_race_df["hispanic"].astype(float) / 100)
 
 occupations = {}
 
@@ -113,12 +136,10 @@ for row in bls_reports["oesm21nat"][-1].itertuples():
     #sorry ...  just flattening lists and converting the inner lists to tuples 
     lenient_nested =  [ page for page_lists in relevant_links_nested_2 for page in page_lists[0]]
     strict_nested =  [ page for page_lists in relevant_links_nested_2 for page in page_lists[1]]
-    
 
     # sorry ... I don't know of a better way 
     lenient_tuple_list = list(set([tuple(page) for page in lenient_nested]))
     strict_tuple_list = list(set([tuple(page) for page in strict_nested]))
-
 
     # converting every [page_name, link] sublist to tuples and then converting the outer list to a set
     relevant_revision_dirs = list(filter(lambda x: x.startswith(code_slice), revision_dirs))
@@ -144,6 +165,21 @@ for name, value in bls_reports.items():
         for key in occ_stat_keys:
             occupations[row["occ_code"]][key][timestamp] = row[key]
 
+for occ_code, contents in occupations.items():
+    if contents["occ_title"].lower() in gender_race_df["occ_name"].tolist():
+        occupations[occ_code]["women"] = round(gender_race_df[gender_race_df['occ_name'] == contents["occ_title"].lower()]['women'].item(), 3)
+        occupations[occ_code]["white"] = round(gender_race_df[gender_race_df['occ_name'] == contents["occ_title"].lower()]['white'].item(), 3)
+        occupations[occ_code]["african_american"] = round(gender_race_df[gender_race_df['occ_name'] == contents["occ_title"].lower()]['african_american'].item(), 3)
+        occupations[occ_code]["asian"] = round(gender_race_df[gender_race_df['occ_name'] == contents["occ_title"].lower()]['asian'].item(), 3)
+        occupations[occ_code]["hispanic"] = round(gender_race_df[gender_race_df['occ_name'] == contents["occ_title"].lower()]['hispanic'].item(), 3)
+    else:
+        occupations[occ_code]["women"] = None
+        occupations[occ_code]["white"] = None
+        occupations[occ_code]["african_american"] = None
+        occupations[occ_code]["asian"] = None
+        occupations[occ_code]["hispanic"] = None
+
+# adding to the database
 table_creation = '''CREATE TABLE occupations(
 idx integer primary key,
 occ_code text,
@@ -153,6 +189,11 @@ strict_links text,
 lenient_links text,
 rev_dirs text,
 tot_emp text,
+women text,
+white text,
+african_american text,
+asian text,
+hispanic text,
 h_mean text,
 a_mean text,
 h_pct10 text,
@@ -172,9 +213,9 @@ cur.execute(table_creation)
 
 error_count = 0
 for occupation_dict in occupations.values():
-    occupation = Occupation(expected_lenght = 18, **occupation_dict)
+    occupation = Occupation(expected_lenght = 23, **occupation_dict)
         
-    cur.execute(f"INSERT INTO occupations VALUES (NULL,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", occupation.to_db()) 
+    cur.execute(f"INSERT INTO occupations VALUES (NULL,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", occupation.to_db())
     con.commit()
 
 print(error_count)
