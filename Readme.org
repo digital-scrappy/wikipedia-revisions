@@ -30,8 +30,10 @@ creating an OAuth consumer for higher request limit can be done here (after crea
 
 * Next Steps
 
-** TODO Add lenient and strict columns in ETL
-** TODO Add gender information column in ETL
+** DONE Add lenient and strict columns in ETL
+CLOSED: [2022-08-22 Mon 15:35]
+** DONE Add gender information column in ETL
+CLOSED: [2022-08-22 Mon 15:35]
 ** TODO Get backlinks with Wikimedia API and add to ETL
 [[https://www.mediawiki.org/w/api.php?action=help&modules=query%2Blinkshere][links here]]
 ** TODO Get topics of complete articles with BERTopic
