@@ -9,7 +9,8 @@ class Occupation:
                  occ_code: str,
                  occ_group: str,
                  occ_title: str,
-                 links: List[ Tuple[str,str] ],
+                 strict_links: List[Tuple[str,str]],
+                 lenient_links: List[Tuple[str,str]],
                  rev_dirs: List[str],
                  tot_emp: List[float],
                  h_mean: List[float],
@@ -31,7 +32,8 @@ class Occupation:
         self.occ_code = occ_code
         self.occ_group = occ_group
         self.occ_title = occ_title
-        self.links = links
+        self.strict_links = strict_links
+        self.lenient_links = lenient_links
         self.rev_dirs = rev_dirs
         self.tot_emp = tot_emp
         self.h_mean = h_mean
@@ -46,14 +48,14 @@ class Occupation:
         self.a_median = a_median
         self.a_pct75 = a_pct75
         self.a_pct90 = a_pct90
-        self.noNaNs = True
+        self.missing_bls_values = False
 
 
         for attr in list_that_should_be_of_length:
             lenght = len(getattr(self, attr))
 
             if lenght != expected_lenght:
-                self.noNaNs = False
+                self.missing_bls_values = True
 
 
 
@@ -66,7 +68,8 @@ class Occupation:
         return (self.occ_code,                               
                 self.occ_group,
                 self.occ_title,
-                json.dumps(self.links),
+                json.dumps(self.strict_links),
+                json.dumps(self.lenient_links),
                 json.dumps(self.rev_dirs),
                 json.dumps(self.tot_emp),
                 json.dumps(self.h_mean),
@@ -81,4 +84,4 @@ class Occupation:
                 json.dumps(self.a_median),
                 json.dumps(self.a_pct75),
                 json.dumps(self.a_pct90),
-                self.noNaNs)
+                self.missing_bls_values)

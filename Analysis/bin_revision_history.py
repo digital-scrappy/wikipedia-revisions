@@ -4,6 +4,7 @@ from dateutil.relativedelta import relativedelta
 import sqlite3
 import json
 from time import time
+from path_util import old_database_path
 
 def first_day_of_next_month(dt):
     '''Get the first day of the next month. Preserves the timezone.
@@ -56,9 +57,8 @@ def month_bin_revisions(rev_dict):
 
     return bins
 
-        
 
-db_path = "/home/scrappy/data/csh/aggregated_edits.db"
+db_path = old_database_path
 con = sqlite3.connect(db_path)
 cur = con.cursor()
 cur.execute("SELECT lenient_revisions FROM occupations")
@@ -67,4 +67,5 @@ all_revs = []
 for occ in occupations:
     revision_dict = month_bin_revisions(json.loads(occ[0]))
     all_revs.append(revision_dict)
-    
+
+print(all_revs[0])  # TODO remove
