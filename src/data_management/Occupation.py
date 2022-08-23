@@ -13,11 +13,11 @@ class Occupation:
                  lenient_links: List[Tuple[str,str]],
                  rev_dirs: List[str],
                  tot_emp: List[float],
-                 Women: int,
-                 White: int,
-                 African_American: int,
-                 Asian: int,
-                 Hispanic: int,
+                 women: int,
+                 white: int,
+                 african_american: int,
+                 asian: int,
+                 hispanic: int,
                  h_mean: List[float],
                  a_mean: List[float],
                  h_pct10: List[float],
@@ -41,11 +41,11 @@ class Occupation:
         self.lenient_links = lenient_links
         self.rev_dirs = rev_dirs
         self.tot_emp = tot_emp
-        self.Women = Women
-        self.White = White
-        self.African_American = African_American
-        self.Asian = Asian
-        self.Hispanic = Hispanic
+        self.women = women
+        self.white = white
+        self.african_american = african_american
+        self.asian = asian
+        self.hispanic = hispanic
         self.h_mean = h_mean
         self.a_mean = a_mean
         self.h_pct10 = h_pct10
@@ -66,14 +66,9 @@ class Occupation:
 
             if lenght != expected_lenght:
                 self.missing_bls_values = True
-
-
-
-
     
 
     def to_db(self):
-
 
         return (self.occ_code,                               
                 self.occ_group,
@@ -82,11 +77,11 @@ class Occupation:
                 json.dumps(self.lenient_links),
                 json.dumps(self.rev_dirs),
                 json.dumps(self.tot_emp),
-                json.dumps(self.Women),
-                json.dumps(self.White),
-                json.dumps(self.African_American),
-                json.dumps(self.Asian),
-                json.dumps(self.Hispanic),
+                json.dumps(self.women),
+                json.dumps(self.white),
+                json.dumps(self.african_american),
+                json.dumps(self.asian),
+                json.dumps(self.hispanic),
                 json.dumps(self.h_mean),
                 json.dumps(self.a_mean),
                 json.dumps(self.h_pct10),
