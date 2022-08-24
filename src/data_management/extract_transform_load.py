@@ -4,9 +4,51 @@ from  zipfile import ZipFile
 import pandas as pd
 from datetime import datetime
 import json
+from json import JSONDecodeError
 import sqlite3
 from Occupation import Occupation
+from tqdm import tqdm
 
+def open_revisions(path):
+    revisions = []
+    for rev_name in os.listdir(path):
+            with open((path / rev_name)) as rev_file:
+                try:
+                    revision = json.load(rev_file)
+                except JSONDecodeError:
+                    continue
+                else:
+                    try:
+                        sub_set_revison = {"revid" : revision["revid"],
+                                        "user" : revision["user"],
+                                        "userid" : revision["userid"],
+                                        "timestamp" : revision["timestamp"],
+                                        "tags" : revision["tags"]}
+                    except KeyError:
+                        continue
+                    else:
+                        revisions.append(sub_set_revison)
+    return revisions
+    
+
+
+
+def get_revisions(dirs, page_list):
+    pages = {}
+    
+    for i in dirs:
+        top_path = revisions_path / i
+        
+        for page in os.listdir(top_path):
+            
+            if page in page_list and page not in list(pages.keys()):
+                
+                pages[page] = open_revisions(top_path / page)
+    return pages
+
+                
+
+    
 bls_source_path = data_path / "bls" / "source"
 bls_gender_race_excel = data_path / "bls" / "gender_race_hispanic" / "cpsaat11_gender, races, hispanic.xlsx"
 
@@ -62,7 +104,8 @@ with open(links_path) as links_file:
 
 # using the original zip archives to guarantee correct data 
 # opening all the zip archives and appending the corresponding dataframes to bls_reports
-for zip_name in os.listdir(bls_source_path):
+print("extracting data from BLS zip archives")
+for zip_name in tqdm(os.listdir(bls_source_path)):
     zip_path = bls_source_path / zip_name
 
     with ZipFile(zip_path) as zip_file:
@@ -105,7 +148,8 @@ gender_race_df["hispanic"] = (gender_race_df["hispanic"].astype(float) / 100)
 occupations = {}
 
 # initialization of every occupation in the occupations dictionary
-for row in bls_reports["oesm21nat"][-1].itertuples():
+print("building the dictionary")
+for row in tqdm(bls_reports["oesm21nat"][-1].itertuples()):
     row = row._asdict()
     detail_level  = row["o_group"]
     if detail_level == "total":
@@ -147,11 +191,34 @@ for row in bls_reports["oesm21nat"][-1].itertuples():
     occupations[occ_code]["strict_links"] = strict_tuple_list
     occupations[occ_code]["lenient_links"] = lenient_tuple_list
     occupations[occ_code]["rev_dirs"] = relevant_revision_dirs
+    occupations[occ_code]["strict_revs"] = {}
+    occupations[occ_code]["lenient_revs"] = {}
+
+    #slowing down this script by 2 minutes :)
+    page_names =  list(set(map(lambda x: x[0], strict_tuple_list + lenient_tuple_list)))
+
+    pages = get_revisions(relevant_revision_dirs, page_names)
+    for key, value in  pages.items():
+        if key in map(lambda x: x[0], strict_tuple_list):
+            occupations[occ_code]["strict_revs"][key] = value
+        if key in map(lambda x: x[0], lenient_tuple_list):
+            occupations[occ_code]["lenient_revs"][key] = value
+            
+                    
+    
+    
+    
+
+    
+
+
+
     
 
 # adding all the older reports to the occupations dictionary
 occ_21_keys = list(occupations.keys())
-for name, value in bls_reports.items():
+print("adding older bls stats")
+for name, value in tqdm(bls_reports.items()):
     timestamp = datetime(int("20" + name[4:6]), 5, 1).isoformat()
 
     for row in value[-1].itertuples():
@@ -165,7 +232,8 @@ for name, value in bls_reports.items():
         for key in occ_stat_keys:
             occupations[row["occ_code"]][key][timestamp] = row[key]
 
-for occ_code, contents in occupations.items():
+print("adding gender information")
+for occ_code, contents in tqdm(occupations.items()):
     if contents["occ_title"].lower() in gender_race_df["occ_name"].tolist():
         occupations[occ_code]["women"] = round(gender_race_df[gender_race_df['occ_name'] == contents["occ_title"].lower()]['women'].item(), 3)
         occupations[occ_code]["white"] = round(gender_race_df[gender_race_df['occ_name'] == contents["occ_title"].lower()]['white'].item(), 3)
@@ -187,6 +255,8 @@ occ_group text,
 occ_title text,
 strict_links text,
 lenient_links text,
+strict_revs text,
+lenient_revs text,
 rev_dirs text,
 tot_emp text,
 women text,
@@ -212,10 +282,11 @@ cur.execute(table_creation)
 
 
 error_count = 0
-for occupation_dict in occupations.values():
+print("writing to database")
+for occupation_dict in tqdm(occupations.values()):
     occupation = Occupation(expected_lenght = 23, **occupation_dict)
         
-    cur.execute(f"INSERT INTO occupations VALUES (NULL,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", occupation.to_db())
+    cur.execute(f"INSERT INTO occupations VALUES (NULL,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", occupation.to_db())
     con.commit()
 
 print(error_count)
