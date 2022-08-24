@@ -1,5 +1,5 @@
 #+Title: Project Documentation 
-
+ 
 * Getting started
 ** Environment Setup
 Jakob manages his Dependencies using [[https://python-poetry.org/docs/][poetry]] it's a python dependency management tool. 
@@ -25,7 +25,7 @@ I guess the most interesting scripts currently are located in the =Analysis/= di
 
  
 ** Wikipedia api
-creating an OAuth consumer for higher request limit can be done here (after creating a WikiMedia account) https://meta.wikimedia.org/wiki/Special:OAuthConsumerRegistration/propose
+creating an OAuth (OAuth 1.0a) consumer for higher request limit can be done here (after creating a WikiMedia account) https://meta.wikimedia.org/wiki/Special:OAuthConsumerRegistration/propose
 
 
 
