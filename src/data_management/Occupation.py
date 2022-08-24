@@ -1,5 +1,5 @@
 import json
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 
 class Occupation:
 
@@ -11,6 +11,8 @@ class Occupation:
                  occ_title: str,
                  strict_links: List[Tuple[str,str]],
                  lenient_links: List[Tuple[str,str]],
+                 strict_revs: Dict,
+                 lenient_revs: Dict,
                  rev_dirs: List[str],
                  tot_emp: List[float],
                  women: int,
@@ -39,6 +41,8 @@ class Occupation:
         self.occ_title = occ_title
         self.strict_links = strict_links
         self.lenient_links = lenient_links
+        self.strict_revs = strict_revs
+        self.lenient_revs = strict_revs
         self.rev_dirs = rev_dirs
         self.tot_emp = tot_emp
         self.women = women
@@ -75,6 +79,8 @@ class Occupation:
                 self.occ_title,
                 json.dumps(self.strict_links),
                 json.dumps(self.lenient_links),
+                json.dumps(self.strict_revs),
+                json.dumps(self.lenient_revs),
                 json.dumps(self.rev_dirs),
                 json.dumps(self.tot_emp),
                 json.dumps(self.women),
