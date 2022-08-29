@@ -104,7 +104,7 @@ for zip_name in tqdm(os.listdir(bls_source_path)):
 
             bls_reports[bls_name].append(df)
 
-# gender race information
+# gender race information - parsing the excel
 gender_race_df = pd.read_excel(bls_gender_race_excel, skiprows = 5)
 gender_race_df = gender_race_df.iloc[3: , :] # delete first 3 rows
 gender_race_df = gender_race_df.iloc[:-2 , :] # delete last 2 rows
@@ -116,6 +116,8 @@ gender_race_df = gender_race_df.rename(columns={gender_race_df.columns[3]: 'whit
 gender_race_df = gender_race_df.rename(columns={gender_race_df.columns[4]: 'african_american'})
 gender_race_df = gender_race_df.rename(columns={gender_race_df.columns[5]: 'asian'})
 gender_race_df = gender_race_df.rename(columns={gender_race_df.columns[6]: 'hispanic'})
+
+# declare missings, make occ_name lowercase to allow matching with SOC data
 gender_race_df = gender_race_df.replace('–', None)
 gender_race_df['occ_name'] = gender_race_df['occ_name'].str.lower()
 
@@ -125,7 +127,36 @@ gender_race_df["african_american"] = (gender_race_df["african_american"].astype(
 gender_race_df["asian"] = (gender_race_df["asian"].astype(float) / 100)
 gender_race_df["hispanic"] = (gender_race_df["hispanic"].astype(float) / 100)
 
-occupations = {}
+# renaming several occ_names from the excel to fit the official SOC titles
+gender_race_df['occ_name'] = gender_race_df['occ_name'].replace({
+    'education, training, and library occupations': 'educational instruction and library occupations',
+    'purchasing agents, except wholesale, retail, and farm products': 'buyers and purchasing agents',
+    'other financial specialists': 'financial specialists, all other',
+    'database administrators and architects': 'database administrators',
+    'other mathematical science occupations': 'mathematical science occupations, all other',
+    'other drafters': 'drafters, all other',
+    'other engineering technologists and technicians, except drafters': 'engineering technologists and technicians, except drafters, all other',
+    'other psychologists': 'psychologists, all other',
+    'other life, physical, and social science technicians': 'life, physical, and social science technicians, all other',
+    'mental health counselors': 'substance abuse, behavioral disorder, and mental health counselors',
+    'other community and social service specialists': 'community and social service specialists, all other',
+    'other educational instruction and library workers': 'educational instruction and library workers, all other',
+    'other designers': 'designers, all other',
+    'other physicians': 'physicians, all other',
+    'dietetic technicians and ophthalmic medical technicians': 'ophthalmic medical technicians',
+    'home health aides': 'home health and personal care aides',
+    'orderlies and psychiatric aides': 'orderlies',
+    'other healthcare support workers': 'healthcare support workers, all other',
+    'janitors and building cleaners': 'janitors and cleaners, except maids and housekeeping cleaners',
+    'other entertainment attendants and related workers': 'entertainment attendants and related workers, all other',
+    'other extraction workers': 'extraction workers, all other',
+    'industrial and refractory machinery mechanics': 'industrial machinery mechanics',
+    'other installation, maintenance, and repair workers': 'installation, maintenance, and repair workers, all other',
+    'other assemblers and fabricators': 'miscellaneous assemblers and fabricators',
+    'other metal workers and plastic workers': 'metal workers and plastic workers, all other',
+    'other production workers': 'production workers, all other',
+    'other material moving workers': 'material moving workers, all other'})
+
 
 
 #ram unfriendly runtime friendly code below
@@ -145,6 +176,7 @@ for dir_number in tqdm(os.listdir(revisions_path)):
                 revs_by_pages[page_name].append(rev_content)
 
 
+occupations = {}
 
 # initialization of every occupation in the occupations dictionary
 print("building the dictionary")
