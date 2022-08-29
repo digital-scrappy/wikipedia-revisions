@@ -9,43 +9,23 @@ import sqlite3
 from Occupation import Occupation
 from tqdm import tqdm
 
-def open_revisions(path):
-    revisions = []
-    for rev_name in os.listdir(path):
-            with open((path / rev_name)) as rev_file:
-                try:
-                    revision = json.load(rev_file)
-                except JSONDecodeError:
-                    continue
-                else:
-                    try:
-                        sub_set_revison = {"revid" : revision["revid"],
-                                        "user" : revision["user"],
-                                        "userid" : revision["userid"],
-                                        "timestamp" : revision["timestamp"],
-                                        "tags" : revision["tags"]}
-                    except KeyError:
-                        continue
-                    else:
-                        revisions.append(sub_set_revison)
-    return revisions
-    
 
-
-
-def get_revisions(dirs, page_list):
-    pages = {}
-    
-    for i in dirs:
-        top_path = revisions_path / i
-        
-        for page in os.listdir(top_path):
-            
-            if page in page_list and page not in list(pages.keys()):
-                
-                pages[page] = open_revisions(top_path / page)
-    return pages
-
+def open_revision(path):
+    with open(path) as rev_file:
+        try:
+            revision = json.load(rev_file)
+        except JSONDecodeError:
+            sub_set_revison = None
+        else:
+            try:
+                sub_set_revison = {"revid" : revision["revid"],
+                                   "user" : revision["user"],
+                                   "userid" : revision["userid"],
+                                   "timestamp" : revision["timestamp"],
+                                   "tags" : revision["tags"]}
+            except KeyError:
+                sub_set_revison = None
+        return sub_set_revison
                 
 
     
@@ -147,9 +127,28 @@ gender_race_df["hispanic"] = (gender_race_df["hispanic"].astype(float) / 100)
 
 occupations = {}
 
+
+#ram unfriendly runtime friendly code below
+print("retrieving all revisions")
+revs_by_pages = {}
+for dir_number in tqdm(os.listdir(revisions_path)):
+    pages_path = (revisions_path / dir_number)
+    
+    for page_name in os.listdir(pages_path):
+        revs_by_pages[page_name] = []
+        page_path = (pages_path / page_name)
+        for revision in os.listdir(page_path):
+            rev_path = (page_path / revision)
+            rev_content = open_revision(rev_path)
+
+            if rev_content:
+                revs_by_pages[page_name].append(rev_content)
+
+
+
 # initialization of every occupation in the occupations dictionary
 print("building the dictionary")
-for row in tqdm(bls_reports["oesm21nat"][-1].itertuples()):
+for row in bls_reports["oesm21nat"][-1].itertuples():
     row = row._asdict()
     detail_level  = row["o_group"]
     if detail_level == "total":
@@ -196,13 +195,13 @@ for row in tqdm(bls_reports["oesm21nat"][-1].itertuples()):
 
     #slowing down this script by 2 minutes :)
     page_names =  list(set(map(lambda x: x[0], strict_tuple_list + lenient_tuple_list)))
+    strict_names = map(lambda x: x[0], strict_tuple_list)
+    lenient_names = map(lambda x: x[0], lenient_tuple_list)
 
-    pages = get_revisions(relevant_revision_dirs, page_names)
-    for key, value in  pages.items():
-        if key in map(lambda x: x[0], strict_tuple_list):
-            occupations[occ_code]["strict_revs"][key] = value
-        if key in map(lambda x: x[0], lenient_tuple_list):
-            occupations[occ_code]["lenient_revs"][key] = value
+    for page_name in strict_names:
+        occupations[occ_code]["strict_revs"][page_name] = revs_by_pages[page_name]
+    for page_name in lenient_names:
+        occupations[occ_code]["lenient_revs"][page_name] = revs_by_pages[page_name]
             
                     
     
