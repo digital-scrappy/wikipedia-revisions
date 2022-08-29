@@ -22,7 +22,9 @@ def open_revision(path):
                                    "user" : revision["user"],
                                    "userid" : revision["userid"],
                                    "timestamp" : revision["timestamp"],
-                                   "tags" : revision["tags"]}
+                                   "tags" : revision["tags"],
+                                   "lenght": len(revision["*"])}
+
             except KeyError:
                 sub_set_revison = None
         return sub_set_revison
@@ -224,6 +226,8 @@ for row in bls_reports["oesm21nat"][-1].itertuples():
     occupations[occ_code]["rev_dirs"] = relevant_revision_dirs
     occupations[occ_code]["strict_revs"] = {}
     occupations[occ_code]["lenient_revs"] = {}
+    occupations[occ_code]["strict_lengths"] = {}
+    occupations[occ_code]["lenient_lengths"] = {}
 
     #slowing down this script by 2 minutes :)
     page_names =  list(set(map(lambda x: x[0], strict_tuple_list + lenient_tuple_list)))
@@ -231,10 +235,22 @@ for row in bls_reports["oesm21nat"][-1].itertuples():
     lenient_names = map(lambda x: x[0], lenient_tuple_list)
 
     for page_name in strict_names:
-        occupations[occ_code]["strict_revs"][page_name] = revs_by_pages[page_name]
+
+        page_revs = revs_by_pages[page_name]
+        datetimes = [(datetime.fromisoformat(page_rev["timestamp"]), page_rev["lenght"]) for page_rev in page_revs]
+        lenght = max(datetimes, key = lambda x: x[0])[1]
+
+        occupations[occ_code]["strict_revs"][page_name] = page_revs
+        occupations[occ_code]["strict_lengths"][page_name] = lenght
+
     for page_name in lenient_names:
-        occupations[occ_code]["lenient_revs"][page_name] = revs_by_pages[page_name]
-            
+        
+        page_revs = revs_by_pages[page_name]
+        datetimes = [(datetime.fromisoformat(page_rev["timestamp"]), page_rev["lenght"]) for page_rev in page_revs]
+        lenght = max(datetimes, key = lambda x: x[0])[1]
+        
+        occupations[occ_code]["lenient_revs"][page_name] = page_revs
+        occupations[occ_code]["lenient_lengths"][page_name] = lenght
                     
     
     
@@ -288,6 +304,8 @@ strict_links text,
 lenient_links text,
 strict_revs text,
 lenient_revs text,
+strict_lengths text,
+lenient_lengths text,
 rev_dirs text,
 tot_emp text,
 women text,
@@ -317,7 +335,7 @@ print("writing to database")
 for occupation_dict in tqdm(occupations.values()):
     occupation = Occupation(expected_lenght = 23, **occupation_dict)
         
-    cur.execute(f"INSERT INTO occupations VALUES (NULL,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", occupation.to_db())
+    cur.execute(f"INSERT INTO occupations VALUES (NULL,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", occupation.to_db())
     con.commit()
 
 print(error_count)

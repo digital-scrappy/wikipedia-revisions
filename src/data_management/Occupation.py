@@ -13,6 +13,8 @@ class Occupation:
                  lenient_links: List[Tuple[str,str]],
                  strict_revs: Dict,
                  lenient_revs: Dict,
+                 strict_lengths: Dict,
+                 lenient_lengths: Dict,
                  rev_dirs: List[str],
                  tot_emp: List[float],
                  women: int,
@@ -43,6 +45,8 @@ class Occupation:
         self.lenient_links = lenient_links
         self.strict_revs = strict_revs
         self.lenient_revs = lenient_revs
+        self.strict_lengths = strict_lengths
+        self.lenient_lengths = lenient_lengths
         self.rev_dirs = rev_dirs
         self.tot_emp = tot_emp
         self.women = women
@@ -81,6 +85,8 @@ class Occupation:
                 json.dumps(self.lenient_links),
                 json.dumps(self.strict_revs),
                 json.dumps(self.lenient_revs),
+                json.dumps(self.strict_lengths),
+                json.dumps(self.lenient_lengths),
                 json.dumps(self.rev_dirs),
                 json.dumps(self.tot_emp),
                 json.dumps(self.women),
