@@ -69,6 +69,17 @@ six = "*"
 test = ["astroid", "pytest"]
 
 [[package]]
+name = "astunparse"
+version = "1.6.3"
+description = "An AST unparser for Python"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+six = ">=1.6.1,<2.0"
+
+[[package]]
 name = "atomicwrites"
 version = "1.4.1"
 description = "Atomic file writes."
@@ -274,12 +285,41 @@ optional = false
 python-versions = ">=3.6"
 
 [[package]]
+name = "execnb"
+version = "0.1.2"
+description = "A description of your project"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+fastcore = ">=1.5.5"
+ipython = "*"
+
+[package.extras]
+dev = ["pillow", "matplotlib"]
+
+[[package]]
 name = "executing"
 version = "0.8.3"
 description = "Get the currently executing AST node of a frame, and other information"
 category = "main"
 optional = false
 python-versions = "*"
+
+[[package]]
+name = "fastcore"
+version = "1.5.22"
+description = "Python supercharged for fastai development"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+packaging = "*"
+
+[package.extras]
+dev = ["numpy", "nbdev (>=0.2.39)", "matplotlib", "pillow", "torch", "pandas", "jupyterlab"]
 
 [[package]]
 name = "fastjsonschema"
@@ -333,6 +373,21 @@ type1 = ["xattr"]
 ufo = ["fs (>=2.2.0,<3)"]
 unicode = ["unicodedata2 (>=14.0.0)"]
 woff = ["zopfli (>=0.1.4)", "brotlicffi (>=0.8.0)", "brotli (>=1.0.1)"]
+
+[[package]]
+name = "ghapi"
+version = "1.0.1"
+description = "A python client for the GitHub API"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+fastcore = ">=1.5.4"
+packaging = "*"
+
+[package.extras]
+dev = ["matplotlib", "jsonref"]
 
 [[package]]
 name = "hdbscan"
@@ -857,6 +912,24 @@ docs = ["sphinx (>=1.5.1)", "sphinx-rtd-theme", "nbsphinx (>=0.2.12)", "ipython"
 serve = ["tornado (>=6.1)"]
 test = ["pytest", "pytest-cov", "pytest-dependency", "ipykernel", "ipywidgets (>=7)", "pre-commit", "pyppeteer (>=1,<1.1)"]
 webpdf = ["pyppeteer (>=1,<1.1)"]
+
+[[package]]
+name = "nbdev"
+version = "2.2.8"
+description = "Create delightful software with Jupyter Notebooks"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+astunparse = "*"
+execnb = ">=0.1.2"
+fastcore = ">=1.5.19"
+ghapi = ">=1.0.1"
+PyYAML = "*"
+
+[package.extras]
+dev = ["nbdev-numpy", "nbdev-stdlib", "pandas", "matplotlib", "black"]
 
 [[package]]
 name = "nbformat"
@@ -1783,7 +1856,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.9, <3.11"
-content-hash = "e4b9b3e5b631869857d0a38ab880d0da8c3279fe5b0b67ea3702fea61f42d24a"
+content-hash = "bc429661f0787018c7e68c4d2e25657b4f3624a209d6b21f8065b63fa5f6e069"
 
 [metadata.files]
 anyio = []
@@ -1818,6 +1891,10 @@ argon2-cffi-bindings = [
 asttokens = [
     {file = "asttokens-2.0.5-py2.py3-none-any.whl", hash = "sha256:0844691e88552595a6f4a4281a9f7f79b8dd45ca4ccea82e5e05b4bbdb76705c"},
     {file = "asttokens-2.0.5.tar.gz", hash = "sha256:9a54c114f02c7a9480d56550932546a3f1fe71d8a02f1bc7ccd0ee3ee35cf4d5"},
+]
+astunparse = [
+    {file = "astunparse-1.6.3-py2.py3-none-any.whl", hash = "sha256:c2652417f2c8b5bb325c885ae329bdf3f86424075c4fd1a128674bc6fba4b8e8"},
+    {file = "astunparse-1.6.3.tar.gz", hash = "sha256:5ad93a8456f0d084c3456d059fd9a92cce667963232cbf763eac3bc5b7940872"},
 ]
 atomicwrites = []
 attrs = [
@@ -1986,9 +2063,17 @@ et-xmlfile = [
     {file = "et_xmlfile-1.1.0-py3-none-any.whl", hash = "sha256:a2ba85d1d6a74ef63837eed693bcb89c3f752169b0e3e7ae5b16ca5e1b3deada"},
     {file = "et_xmlfile-1.1.0.tar.gz", hash = "sha256:8eb9e2bc2f8c97e37a2dc85a09ecdcdec9d8a396530a6d5a33b30b9a92da0c5c"},
 ]
+execnb = [
+    {file = "execnb-0.1.2-py3-none-any.whl", hash = "sha256:e65d315004603da9ec5f9b9ed8c3bc45d7b0be1e3c72f6e5afcb3dc9de78d584"},
+    {file = "execnb-0.1.2.tar.gz", hash = "sha256:d7f5dafe0993b98651a76b1e010052b697cd8bca0d369c8261a258a3c196d37e"},
+]
 executing = [
     {file = "executing-0.8.3-py2.py3-none-any.whl", hash = "sha256:d1eef132db1b83649a3905ca6dd8897f71ac6f8cac79a7e58a1a09cf137546c9"},
     {file = "executing-0.8.3.tar.gz", hash = "sha256:c6554e21c6b060590a6d3be4b82fb78f8f0194d809de5ea7df1c093763311501"},
+]
+fastcore = [
+    {file = "fastcore-1.5.22-py3-none-any.whl", hash = "sha256:96ec9b23cd95f969a3bd0a118aed92a60c7da80d89716ac3585cacc9b26a708a"},
+    {file = "fastcore-1.5.22.tar.gz", hash = "sha256:73c3f268f882955038237bd7d134e5d872d116577ed586025641ecc08b2706c4"},
 ]
 fastjsonschema = []
 fastprogress = []
@@ -1997,6 +2082,10 @@ filelock = [
     {file = "filelock-3.7.1.tar.gz", hash = "sha256:3a0fd85166ad9dbab54c9aec96737b744106dc5f15c0b09a6744a445299fcf04"},
 ]
 fonttools = []
+ghapi = [
+    {file = "ghapi-1.0.1-py3-none-any.whl", hash = "sha256:5e3fdef124a9b533e19b8e990921cd179754bc6c5fdf3f8488f1870e58259bcb"},
+    {file = "ghapi-1.0.1.tar.gz", hash = "sha256:858e6e879cd331f3fed1b85ac615836bea9298a564147ab2e988d284ddae4b04"},
+]
 hdbscan = [
     {file = "hdbscan-0.8.28.tar.gz", hash = "sha256:eedaf71f2f3bbedfc4c38da1ad4897454ce5ebd4792e1a689c979c2853edc05a"},
 ]
@@ -2147,6 +2236,10 @@ nbclient = [
 nbconvert = [
     {file = "nbconvert-6.5.0-py3-none-any.whl", hash = "sha256:c56dd0b8978a1811a5654f74c727ff16ca87dd5a43abd435a1c49b840fcd8360"},
     {file = "nbconvert-6.5.0.tar.gz", hash = "sha256:223e46e27abe8596b8aed54301fadbba433b7ffea8196a68fd7b1ff509eee99d"},
+]
+nbdev = [
+    {file = "nbdev-2.2.8-py3-none-any.whl", hash = "sha256:ea0078be7835e112d36057ed4c671a7346e1a58dfc0be4d1288af3d3fa764657"},
+    {file = "nbdev-2.2.8.tar.gz", hash = "sha256:4f0f384e5c7e24788712d7c834af62ef9a12d8bcc88536243bba23c382f558cd"},
 ]
 nbformat = [
     {file = "nbformat-5.4.0-py3-none-any.whl", hash = "sha256:0d6072aaec95dddc39735c144ee8bbc6589c383fb462e4058abc855348152dad"},
