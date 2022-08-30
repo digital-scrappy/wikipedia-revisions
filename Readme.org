@@ -39,7 +39,24 @@ CLOSED: [2022-08-22 Mon 15:35]
 [[https://www.mediawiki.org/w/api.php?action=help&modules=query%2Blinkshere][links here]]
 ** DONE Get topics of complete articles with BERTopic
 CLOSED: [2022-08-23 Tue 11:43]
+** implement gender ratio summation method
 
+
+\begin{equation}
+\frac{e_{if}}{e_i}=v_i
+\end{equation}
+
+\begin{equation}
+\sum_i{\frac{e_{if}\delta_i}{e_i}
+\end{equation}
+
+\begin{equation}
+$\delta_i = \left\{ 
+  \begin{array}{ c l }
+    1 & \quad \textrm{if article exists for occupation} \\
+    0                 & \quad \textrm{otherwise}
+  \end{array}
+\right.$\end{equation}
 
 * Understanding Wikipedia
 ** Qualitative analysis of edits
@@ -128,7 +145,7 @@ can be changed based on this [[https://maartengr.github.io/BERTopic/getting_star
 
 
 Starts with the creation of a distance matrix based intitially on an estimate of density -> core distance (x) = distance to =kth= nearest neighbor
-$core_k(x)$ and then using the =core distance= defines the =mutual reachability distance= as: $d_{mreach-k}(a,b) = max \begin{Bmatrix}core_k(a)\\ core_k(b)\\ d(a,b)\end{Bmatrix}$.
+$core_k(x)$ and then using the =core distance= defines the =mutual reachability distance= as: $d_{mreach-k}(a,b)= max \begin{Bmatrix}core_k(a)\\ core_k(b)\\ d(a,b)\end{Bmatrix}$.
 
 ***** Building the minimum spanning tree
 The distance matrix is then used to build a weighted graph where data points are represented by vertices and the corresponding mutual reachability distance values are the weights of the edges between them.
