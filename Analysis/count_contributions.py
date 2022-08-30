@@ -15,11 +15,10 @@ def amount_detailed(df_all, df_major):
         sub_df = df_all[df_all['occ_code'].str.contains(str(code)[0:2] + "-")]
         df_sub_detailed = sub_df.loc[(sub_df["occ_group"] == "detailed")]
         amount_of_detailed.append(len(df_sub_detailed))
-        
+    
     articles_per_detailed = []
     for idx, lst in enumerate(df_major["lenient_links"].tolist()):
-        articles_per_detailed.append((len(json.loads(lst))/amount_of_detailed[idx]))  
-        
+        articles_per_detailed.append((len(json.loads(lst))/amount_of_detailed[idx]))
     return articles_per_detailed
 
 def avg_unique_auth_page_lengths(df_major):
