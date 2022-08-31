@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 from scipy.stats import pearsonr
 import numpy as np
+import pandas as pd
 
 def viz_two_axes(df, target_variable, second_metric):
     df_viz = df.sort_values(by=[target_variable])
@@ -46,4 +47,13 @@ def viz_sideways(df, target_variable, second_metric):
     for ax in axes.flat:
         ax.margins(0.03)
         ax.grid(True)
-    fig.tight_layout()
+    fig.tight_layout()#
+    
+    
+def relative_positive_negative(df, target_variable, mapping_dict):
+    relative_vals = [(value - mapping_dict[target_variable]) for value in df[target_variable]]
+    
+    plot_dict = {"code": df["occ_code"].tolist(), "values": relative_vals}    
+    
+    plot_df = pd.DataFrame.from_dict(plot_dict)
+    plot_df.plot(x = "code", y = "values", kind = 'barh', figsize = (18, 10))
