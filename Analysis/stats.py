@@ -9,7 +9,7 @@ from create_df_for_non_ipynb import create_dataframe
 sns.set_theme(style="white")
 
 df = create_dataframe()
-corr_df = df[["art_per_detailed", "avg_unique_auths", "avg_page_lengths", "women_summed", "african_american_summed", "asian_summed", "hispanic_summed", "non_hispanic_white_summed"]].apply(pd.to_numeric)
+corr_df = df[["art_per_detailed", "avg_unique_auths", "avg_page_lengths", "women", "african_american", "asian", "hispanic", "non_hispanic_white"]].apply(pd.to_numeric)
 corr_df.dropna(inplace = True)
 print(corr_df.head(5))
 corr = corr_df.corr(min_periods = 0)
@@ -29,3 +29,4 @@ sns.heatmap(corr, mask=mask, cmap=cmap, vmax=.3, center=0,
             square=True, linewidths=.5, cbar_kws={"shrink": .5})
 
 f.show()
+f.waitforbuttonpress()

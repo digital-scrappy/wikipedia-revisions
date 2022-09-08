@@ -24,9 +24,13 @@ def amount_detailed(df_all, df_major):
 def avg_unique_auth_page_lengths(df_major):
     avg_unique_auths = []
     avg_page_lengths = []
+    number_articles = []
     
     for idx, links_list in enumerate(df_major["lenient_links"].tolist()):
         links_list = json.loads(links_list)
+        
+        number_articles.append(len(links_list))
+        
         revisions_dict = json.loads(df_major.iloc[idx]["lenient_revs"])
         page_length_dict = json.loads(df_major.iloc[idx]["lenient_lengths"])
         
@@ -39,8 +43,8 @@ def avg_unique_auth_page_lengths(df_major):
         avg_unique_auths.append(unique_total/len(links_list))
         avg_page_lengths.append(pages_total/len(links_list))        
 
-    return avg_unique_auths, avg_page_lengths
-
+    return avg_unique_auths, avg_page_lengths, number_articles
+    
 
     
     
