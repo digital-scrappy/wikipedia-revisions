@@ -39,9 +39,14 @@ def avg_unique_auth_page_lengths(df_major):
             link_name = link[0]
             unique_total += len(contributions_by_user(revisions_dict[link_name]))
             pages_total += page_length_dict[link_name]
+        
+        if len(links_list) == 0:
+            avg_unique_auths.append(0)
+            avg_page_lengths.append(0)
             
-        avg_unique_auths.append(unique_total/len(links_list))
-        avg_page_lengths.append(pages_total/len(links_list))        
+        else:
+            avg_unique_auths.append(unique_total/len(links_list))
+            avg_page_lengths.append(pages_total/len(links_list))        
 
     return avg_unique_auths, avg_page_lengths, number_articles
     

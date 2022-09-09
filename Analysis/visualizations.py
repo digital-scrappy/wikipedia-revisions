@@ -9,9 +9,10 @@ def viz_scatterplot_correlation(df, target_variable, second_metric):
     target_v = df[target_variable].tolist()
     second_m = df[second_metric].tolist()
 
-    corr, _ = pearsonr(target_v, second_m)
+    corr, p_value = pearsonr(target_v, second_m)
     print('Pearsons correlation: %.3f' % corr)
-
+    print("The p-value is", p_value)
+    
     plt.scatter(second_m, target_v)
     plt.show()
 
