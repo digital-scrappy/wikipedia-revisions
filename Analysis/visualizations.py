@@ -4,16 +4,18 @@ import numpy as np
 import pandas as pd
 
 
-def viz_scatterplot_correlation(df, target_variable, second_metric):
+def viz_scatterplot_correlation(df, race_gender_var, wiki_metric_var):
     df = df.dropna()
-    target_v = df[target_variable].tolist()
-    second_m = df[second_metric].tolist()
+    race_gender_var_lst = df[race_gender_var].tolist()
+    wiki_metric_var_lst = df[wiki_metric_var].tolist()
 
-    corr, p_value = pearsonr(target_v, second_m)
+    corr, p_value = pearsonr(race_gender_var_lst, wiki_metric_var_lst)
     print('Pearsons correlation: %.3f' % corr)
     print("The p-value is", p_value)
     
-    plt.scatter(second_m, target_v)
+    plt.scatter(race_gender_var_lst, wiki_metric_var_lst)
+    plt.xlabel(str(race_gender_var))
+    plt.ylabel(str(wiki_metric_var))
     plt.show()
 
 
