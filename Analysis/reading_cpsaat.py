@@ -1,6 +1,8 @@
 import pandas as pd
 from path_util import data_path
+from zipfile import ZipFile
 
+## CPSAAT07 excel
 def read_cpsaat07():
     bls_gender_race_excel = data_path / "bls" / "gender_race_hispanic" / "cpsaat07.xlsx"
     df = pd.read_excel(bls_gender_race_excel, skiprows = 7)
@@ -13,6 +15,8 @@ def read_cpsaat07():
     df.loc[27] = df.loc[27] - df.loc[51] # account only for non hispanic whites
     return df
 
+
+## EDUCATION excel
 def read_education_data():
     soc_education_excel = data_path / "bls" / "gender_race_hispanic" / "education.xlsx"
     df = pd.read_excel(soc_education_excel, sheet_name = "Table 5.3", skiprows = 1)
@@ -23,18 +27,32 @@ def read_education_data():
     return df
 
 def get_major_median(df):
-    education_median_dict = {}
 
+    total_lst = []
     for code_digits in range(11, 54, 2):
         code_hyphon = str(code_digits) + "-"
         sub_df = df.loc[df['2021 National Employment Matrix code'].str.contains(code_hyphon, case=False)]
-
         columns = (sub_df.columns.tolist())[1:]
         median_lst = []
+
+        median_lst.append((code_hyphon + "0000"))
         for col in columns:
             median_lst.append(sub_df[col].median())
-        education_median_dict[code_hyphon + "0000"] = median_lst  # create a list for each dict
+        total_lst.append(median_lst)
 
-    return education_median_dict
+    return total_lst
 
-# get_major_median(read_education_data()) # code for extracting the education data as a dict
+
+## M2021 SOC excel
+bls_source_path_2021 = data_path / "bls" / "source" / "oesm21nat.zip"
+
+def read_m2021():
+    with ZipFile(bls_source_path_2021) as zip_file:
+        with zip_file.open("oesm21nat/national_M2021_dl.xlsx", "r") as xls_file:
+            df = pd.read_excel(xls_file)
+            return df
+
+def get_major_median_annual(df):
+    df_majors = df.loc[df['O_GROUP'] == "major"]
+    df_majors_trimmed = df_majors[['OCC_CODE', 'A_MEAN', 'A_MEDIAN']]
+    return df_majors_trimmed
