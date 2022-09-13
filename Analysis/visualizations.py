@@ -1,27 +1,62 @@
-import matplotlib.pyplot as plt
-from scipy.stats import pearsonr
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
+from scipy.stats import pearsonr
+from sklearn import linear_model, datasets
 
 
 def viz_scatterplot_correlation(df, race_gender_var, wiki_metric_var):
     df = df.dropna()
-    race_gender_var_lst = df[race_gender_var].tolist()
-    wiki_metric_var_lst = df[wiki_metric_var].tolist()
+    race_gender_var_lst = np.array(df[race_gender_var].tolist()).reshape(-1, 1)
+    wiki_metric_var_lst = np.array(df[wiki_metric_var].tolist())
 
-    corr, p_value = pearsonr(race_gender_var_lst, wiki_metric_var_lst)
-    print('Pearsons correlation: %.3f' % corr)
-    print("The p-value is", p_value)
+    # OLD PEARSON CODE
+    # corr, p_value = pearsonr(race_gender_var_lst, wiki_metric_var_lst)
+    # print('Pearsons correlation of the data: %.3f' % corr)
+    # print("The p-value is", p_value)
     
-    plt.scatter(race_gender_var_lst, wiki_metric_var_lst)
+    # REGRESSIONS
+    # Fit line using all data
+    lr = linear_model.LinearRegression()
+    lr.fit(race_gender_var_lst, wiki_metric_var_lst)
+    
+    # Robustly fit linear model with RANSAC algorithm
+    ransac = linear_model.RANSACRegressor()
+    ransac.fit(race_gender_var_lst, wiki_metric_var_lst)
+    inlier_mask = ransac.inlier_mask_
+    outlier_mask = np.logical_not(inlier_mask)
+    
+    # Predict data of estimated models
+    line_X = np.arange(race_gender_var_lst.min(), race_gender_var_lst.max())[:, np.newaxis]
+    line_y = lr.predict(line_X)
+    line_y_ransac = ransac.predict(line_X)
+    # Compare estimated coefficients
+    print("Estimated coefficients (linear regression, RANSAC):")
+    print(lr.coef_, ransac.estimator_.coef_)
+    
+    
+    lw = 2
+    plt.plot(line_X, line_y, color='navy', linewidth=lw, label='Regural Linear regression')
+    plt.plot(line_X, line_y_ransac, color='royalblue', linewidth=lw, label='RANSAC regression')
+    
+    plt.scatter(race_gender_var_lst[inlier_mask], wiki_metric_var_lst[inlier_mask], color='yellowgreen', marker='.', label='Inliers')
+    plt.scatter(race_gender_var_lst[outlier_mask], wiki_metric_var_lst[outlier_mask], color='gold', marker='.', label='Outliers')
+
+    plt.legend(loc='upper right')
     plt.xlabel(str(race_gender_var))
     plt.ylabel(str(wiki_metric_var))
     plt.show()
 
+    # OLD VIZ CODE
+    # plt.scatter(race_gender_var_lst, wiki_metric_var_lst)
+    # plt.xlabel(str(race_gender_var))
+    # plt.ylabel(str(wiki_metric_var))
+    # plt.show()
 
+
+    
 # Taken from here:
 # https://stackoverflow.com/questions/27694221/using-python-libraries-to-plot-two-horizontal-bar-charts-sharing-same-y-axis
-
 def viz_sideways(df, target_variable, second_metric):
     df = df.dropna()
     
