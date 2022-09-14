@@ -8,7 +8,6 @@ from scipy.stats import pearsonr
 
 from path_util import data_path
 from count_contributions import contributions_by_user, amount_detailed, avg_unique_auth_page_lengths
-from visualizations import viz_scatterplot_correlation, viz_sideways, relative_positive_negative
 from sum_stats import sum_up_attributes
 
 def create_dataframe():
