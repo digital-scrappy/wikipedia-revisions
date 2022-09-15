@@ -26,8 +26,8 @@ def read_education_data():
     df = df.astype(float, errors = "ignore")
     return df
 
-def get_major_median(df):
 
+def get_major_median(df):
     total_lst = []
     for code_digits in range(11, 54, 2):
         code_hyphon = str(code_digits) + "-"
@@ -43,6 +43,16 @@ def get_major_median(df):
     return total_lst
 
 
+
+def get_detailed_education(df_education, df_detailed):
+	
+	df_education = df_education.rename({'2021 National Employment Matrix code':'occ_code'}, axis='columns')
+	
+	merged_df = df_detailed.merge(df_education, on='occ_code', how='left')
+	
+	return merged_df
+
+
 ## M2021 SOC excel
 bls_source_path_2021 = data_path / "bls" / "source" / "oesm21nat.zip"
 
@@ -56,3 +66,8 @@ def get_major_median_annual(df):
     df_majors = df.loc[df['O_GROUP'] == "major"]
     df_majors_trimmed = df_majors[['OCC_CODE', 'A_MEAN', 'A_MEDIAN']]
     return df_majors_trimmed
+
+def get_detailed_median_annual(df):
+    df_detaileds = df.loc[df['O_GROUP'] == "detailed"]
+    df_detaileds_trimmed = df_detaileds[['OCC_CODE', 'A_MEAN', 'A_MEDIAN']]
+    return df_detaileds_trimmed
