@@ -6,7 +6,36 @@ from scipy.stats import pearsonr
 from sklearn import linear_model, datasets
 import statsmodels.api as sm
 from statsmodels.formula.api import ols
+from create_dataframes import dataframe_all, create_df_detailed
 
+def completeness_detailed(df_all):
+	df_detailed = create_df_detailed()
+	df_all_detailed = df_all.loc[df_all['occ_group'] == "detailed"] 
+
+	occ_dict = {}
+	for occ_code in df_all_detailed["occ_code"].tolist():
+		beginning = int(str(occ_code)[0:2])
+		if beginning not in occ_dict:
+			occ_dict[beginning] = [1]  
+		elif beginning in occ_dict:
+			occ_dict[beginning][0] += 1
+
+	for occ_code in df_detailed["occ_code"].tolist():
+		beginning = int(str(occ_code)[0:2])
+		if len(occ_dict[beginning]) == 1:
+			occ_dict[beginning].append(1)
+		elif len(occ_dict[beginning]) == 2:
+			occ_dict[beginning][1] += 1
+
+	for key, item in occ_dict.items(): # adjust for missing matches
+		if len(item) == 1:
+			occ_dict[key].append(0)
+
+	df_comp = pd.DataFrame(occ_dict).T
+	df_comparisons = df_comp.rename(index={0: "all", 1: "matched"})
+
+	_ = df_comparisons.plot(kind= 'bar' , secondary_y= 'matched', rot= 0 )
+	plt.show()
 
 def robust_regression(df, wiki_metric_var, race_gender_var):
     df = df.dropna()
