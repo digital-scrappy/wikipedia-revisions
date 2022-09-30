@@ -1,9 +1,12 @@
 #+Title: Wikipedia Revisions & Occupations Project 
  
- ** Introduction
+ * Description
  
-This is a small-scale project by Jakob Hauser and Leon Olszewski which aims to analyze the data contained in the revisions of Wikipedia pages of occupations. We refered to the SOC classification of occupations by the U.S. Bureau of Labor Statistics (https://www.bls.gov/oes/current/oes_stru.htm) and tried to find Wikipedia pages with corresponding names. For instance, the occupation "Bakers" (SOC code 51-3011) would match the Wiki page "Baker" (https://en.wikipedia.org/wiki/Baker). For each Wiki page, there is data on when which textual changes were made and by whom. Our aim was to 
+This is a small project by Jakob Hauser and Leon Olszewski which aims to analyze the data contained in the revisions of Wikipedia pages of occupations. We refered to the SOC classification of occupations by the U.S. Bureau of Labor Statistics (https://www.bls.gov/oes/current/oes_stru.htm) and tried to find Wikipedia pages with corresponding names. For instance, the occupation "Bakers" (SOC code 51-3011) would match the Wiki page "Baker" (https://en.wikipedia.org/wiki/Baker). For each Wiki page, there is data on when which textual changes were made and by whom. Our aim was to use this data to verify changes on the labor market and investigate potential biases in the Wikipedia community.
 
+** Outcome and Outlook
+
+s
 
 * Test
 
