@@ -1,14 +1,12 @@
 #+Title: Wikipedia Revisions & Occupations Project 
  
- * Description
- 
-This is a small project by Jakob Hauser and Leon Olszewski which aims to analyze the data contained in the revisions of Wikipedia pages of occupations. We refered to the SOC classification of occupations by the U.S. Bureau of Labor Statistics (https://www.bls.gov/oes/current/oes_stru.htm) and tried to find Wikipedia pages with corresponding names. For instance, the occupation "Bakers" (SOC code 51-3011) would match the Wiki page "Baker" (https://en.wikipedia.org/wiki/Baker). For each Wiki page, there is data on when which textual changes were made and by whom. Our aim was to use this data to verify changes on the labor market and investigate potential biases in the Wikipedia community.
+This is a small project by Jakob Hauser and Leon Olszewski which aims to analyze the data contained in the revisions of Wikipedia pages of occupations. We refered to the SOC classification of occupations by the U.S. Bureau of Labor Statistics (BLS) and tried to find Wikipedia pages with corresponding names. For instance, the occupation "Bakers" (SOC code 51-3011; https://www.bls.gov/oes/current/oes_stru.htm) would match the Wiki page "Baker" (https://en.wikipedia.org/wiki/Baker). For each Wiki page, there is data on when which textual changes were made and by whom. Our aim was to use this data to verify changes on the labor market and investigate potential biases in the Wikipedia community. In order to make these analyses, we obtained additional data sets, mostly from the BLS. 
 
 ** Outcome and Outlook
 
-s
+As it turned out, the relationship between the textual changes of occupation pages and the growth (in terms of salary or employment) of those occupations is either not there or too difficult to establish. Some analyses on the biases in the Wikipedia community can be found in the two commented notebooks, one focusing on a detailed level of occupations and one on a major level. It shows a moderate bias in terms of activity and number of articles towards Wiki pages of occupations in which there is a high share of men and/or non-white hispanics. A major limitation in this project the number of matches Wiki pages as opposed to the number of SOC occupations classifications (approx. 1400).  
 
-* Test
+One use case of this project would be to pick it up, extract more data (for instance using Wiki pages matching industries of the NAICS, https://www.census.gov/naics/, or alternate SOC titles by the BLS) and revisit the analysis. Wiki pages present a novel resource to study society and to our knowledge, little to no scientific work has been conducted with this approach. 
 
 ** Environment Setup
 Jakob manages his Dependencies using [[https://python-poetry.org/docs/][poetry]] it's a python dependency management tool. 
@@ -38,8 +36,6 @@ creating an OAuth (OAuth 1.0a) consumer for higher request limit can be done her
 
 
 
-
-------------------------------------------------------------------------------------
 
 * Understanding Wikipedia
 ** Qualitative analysis of edits
