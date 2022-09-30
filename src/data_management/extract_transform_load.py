@@ -1,6 +1,6 @@
 from path_util import data_path, revisions_path
 import os
-from  zipfile import ZipFile
+from zipfile import ZipFile
 import pandas as pd
 from datetime import datetime
 import json

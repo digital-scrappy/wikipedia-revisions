@@ -67,5 +67,3 @@ all_revs = []
 for occ in occupations:
     revision_dict = month_bin_revisions(json.loads(occ[0]))
     all_revs.append(revision_dict)
-
-print(all_revs[0])  # TODO remove

@@ -1,6 +1,13 @@
-#+Title: Project Documentation 
+#+Title: Wikipedia Revisions & Occupations Project 
  
-* Getting started
+This is a small project by Jakob Hauser and Leon Olszewski which aims to analyze the data contained in the revisions of Wikipedia pages of occupations. We refered to the SOC classification of occupations by the U.S. Bureau of Labor Statistics (BLS) and tried to find Wikipedia pages with corresponding names. For instance, the occupation "Bakers" (SOC code 51-3011; https://www.bls.gov/oes/current/oes_stru.htm) would match the Wiki page "Baker" (https://en.wikipedia.org/wiki/Baker). For each Wiki page, there is data on when which textual changes were made and by whom. Our aim was to use this data to verify changes on the labor market and investigate potential biases in the Wikipedia community. In order to make these analyses, we obtained additional data sets, mostly from the BLS. 
+
+** Outcome and Outlook
+
+As it turned out, the relationship between the textual changes of occupation pages and the growth (in terms of salary or employment) of those occupations is either not there or too difficult to establish. Some analyses on the biases in the Wikipedia community can be found in the two commented notebooks, one focusing on a detailed level of occupations and one on a major level. It shows a moderate bias in terms of activity and number of articles towards Wiki pages of occupations in which there is a high share of men and/or non-white hispanics. A major limitation in this project the number of matches Wiki pages as opposed to the number of SOC occupations classifications (approx. 1400).  
+
+One use case of this project would be to pick it up, extract more data (for instance using Wiki pages matching industries of the NAICS, https://www.census.gov/naics/, or alternate SOC titles by the BLS) and revisit the analysis. Wiki pages present a novel resource to study society and to our knowledge, little to no scientific work has been conducted with this approach. 
+
 ** Environment Setup
 Jakob manages his Dependencies using [[https://python-poetry.org/docs/][poetry]] it's a python dependency management tool. 
 Jakob actually installed it using his package manager which they don't recommend but he does not fully understand why. (I think there should also be a ubuntu package) 
@@ -29,34 +36,6 @@ creating an OAuth (OAuth 1.0a) consumer for higher request limit can be done her
 
 
 
-* Next Steps
-
-** DONE Add lenient and strict columns in ETL
-CLOSED: [2022-08-22 Mon 15:35]
-** DONE Add gender information column in ETL
-CLOSED: [2022-08-22 Mon 15:35]
-** TODO Get backlinks with Wikimedia API and add to ETL
-[[https://www.mediawiki.org/w/api.php?action=help&modules=query%2Blinkshere][links here]]
-** DONE Get topics of complete articles with BERTopic
-CLOSED: [2022-08-23 Tue 11:43]
-** implement gender ratio summation method
-
-
-\begin{equation}
-\frac{e_{if}}{e_i}=v_i
-\end{equation}
-
-\begin{equation}
-\sum_i{\frac{e_{if}\delta_i}{e_i}
-\end{equation}
-
-\begin{equation}
-$\delta_i = \left\{ 
-  \begin{array}{ c l }
-    1 & \quad \textrm{if article exists for occupation} \\
-    0                 & \quad \textrm{otherwise}
-  \end{array}
-\right.$\end{equation}
 
 * Understanding Wikipedia
 ** Qualitative analysis of edits
