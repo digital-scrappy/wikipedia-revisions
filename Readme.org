@@ -1,8 +1,11 @@
-#+Title: Project Documentation 
+#+Title: Wikipedia Revisions & Occupations Project 
  
-* test1
+ ** Introduction
+ 
+This is a small-scale project by Jakob Hauser and Leon Olszewski which aims to analyze the data contained in the revisions of Wikipedia pages of occupations. We refered to the SOC classification of occupations by the U.S. Bureau of Labor Statistics (https://www.bls.gov/oes/current/oes_stru.htm) and tried to find Wikipedia pages with corresponding names. For instance, the occupation "Bakers" (SOC code 51-3011) would match the Wiki page "Baker" (https://en.wikipedia.org/wiki/Baker). For each Wiki page, there is data on when which textual changes were made and by whom. Our aim was to 
 
-test
+
+* Test
 
 ** Environment Setup
 Jakob manages his Dependencies using [[https://python-poetry.org/docs/][poetry]] it's a python dependency management tool. 
@@ -32,34 +35,8 @@ creating an OAuth (OAuth 1.0a) consumer for higher request limit can be done her
 
 
 
-* Next Steps
 
-** DONE Add lenient and strict columns in ETL
-CLOSED: [2022-08-22 Mon 15:35]
-** DONE Add gender information column in ETL
-CLOSED: [2022-08-22 Mon 15:35]
-** TODO Get backlinks with Wikimedia API and add to ETL
-[[https://www.mediawiki.org/w/api.php?action=help&modules=query%2Blinkshere][links here]]
-** DONE Get topics of complete articles with BERTopic
-CLOSED: [2022-08-23 Tue 11:43]
-** implement gender ratio summation method
-
-
-\begin{equation}
-\frac{e_{if}}{e_i}=v_i
-\end{equation}
-
-\begin{equation}
-\sum_i{\frac{e_{if}\delta_i}{e_i}
-\end{equation}
-
-\begin{equation}
-$\delta_i = \left\{ 
-  \begin{array}{ c l }
-    1 & \quad \textrm{if article exists for occupation} \\
-    0                 & \quad \textrm{otherwise}
-  \end{array}
-\right.$\end{equation}
+------------------------------------------------------------------------------------
 
 * Understanding Wikipedia
 ** Qualitative analysis of edits
